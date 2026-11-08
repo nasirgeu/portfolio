@@ -1,0 +1,132 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import WritingSidebar from '../../components/WritingSidebar.astro';
+import { ArrowRight } from 'lucide-react';
+import { featuredPosts, groups, posts, readingMinutes, shortTitle, writingSection } from '../../data/writing';
+
+const idFor = (g: string) => `topic-${g.toLowerCase().replace(/\s+/g, '-')}`;
+const featuredSlugs = new Set(featuredPosts.map((p) => p.slug));
+// Under each topic: the one-post-per-algorithm posts. The featured comparison posts are shown above.
+const sections = groups
+  .map((g) => ({
+    name: g,
+    id: idFor(g),
+    total: posts.filter((p) => p.group === g).length,
+    items: posts.filter((p) => p.group === g && !featuredSlugs.has(p.slug)),
+  }))
+  .filter((s) => s.items.length > 0);
+---
+
+<Layout
+  title="Writing | Mohd Nasir"
+  description="Short, plain-language notes on operating systems and algorithms, with one post for every algorithm in the Engineering Lab."
+>
+  <div class="relative pt-28 pb-24 sm:pt-36">
+    <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="container-page relative grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <WritingSidebar />
+
+      <div class="min-w-0">
+        <p class="eyebrow mb-4" data-hero>MOHD NASIR / WRITING</p>
+        <h1
+          class="text-[clamp(2.1rem,4vw,3.2rem)] leading-[1.05] font-bold tracking-[-0.04em] text-balance"
+          data-hero
+          style="--d:60ms"
+        >
+          {writingSection.heading}
+        </h1>
+        <p class="mt-5 text-base text-muted sm:text-lg" data-hero style="--d:120ms">
+          {writingSection.intro}
+        </p>
+
+        {
+          posts.length === 0 ? (
+            <p class="mt-12 text-muted">{writingSection.emptyNote}</p>
+          ) : (
+            <>
+              {featuredPosts.length > 0 && (
+                <section class="mt-12" aria-labelledby="start-title">
+                  <h2 id="start-title" class="mb-5 border-b border-line pb-3 text-xl font-semibold tracking-tight">
+                    Start here
+                  </h2>
+                  <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {featuredPosts.map((p) => (
+                      <li>
+                        <a
+                          href={`/writing/${p.slug}`}
+                          class="card card-hover group flex h-full flex-col gap-3 p-6 focus-visible:outline-offset-2"
+                        >
+                          <span class="font-mono text-xs text-muted">
+                            {p.group} · {readingMinutes(p)} min read
+                          </span>
+                          <span class="text-lg font-semibold tracking-tight">{p.title}</span>
+                          <span class="text-sm text-muted">{p.summary}</span>
+                          <span class="mt-auto inline-flex items-center gap-1.5 pt-2 font-mono text-xs text-accent">
+                            Read post
+                            <ArrowRight
+                              size={14}
+                              aria-hidden="true"
+                              className="transition-transform duration-200 group-hover:translate-x-1"
+                            />
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {/* On phones the sidebar is hidden, so the topics are reachable from here. */}
+              <nav aria-label="Topics" class="mt-10 flex flex-wrap gap-2 lg:hidden">
+                {sections.map((s) => (
+                  <a
+                    href={`#${s.id}`}
+                    class="inline-flex min-h-10 items-center gap-2 rounded-full border border-line px-4 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg"
+                  >
+                    {s.name}
+                    <span class="font-mono text-xs">{s.total}</span>
+                  </a>
+                ))}
+              </nav>
+
+              {sections.map((s) => (
+                <section id={s.id} class="mt-12 scroll-mt-24" aria-labelledby={`${s.id}-title`}>
+                  <h2
+                    id={`${s.id}-title`}
+                    class="mb-2 flex items-baseline gap-3 border-b border-line pb-3 text-xl font-semibold tracking-tight"
+                  >
+                    {s.name}
+                    <span class="font-mono text-xs font-normal text-muted">{s.total} posts</span>
+                  </h2>
+                  <ul class="divide-y divide-line">
+                    {s.items.map((p) => (
+                      <li>
+                        <a
+                          href={`/writing/${p.slug}`}
+                          class="group -mx-3 flex flex-col gap-1 rounded-lg px-3 py-3.5 transition-colors hover:bg-surface sm:flex-row sm:items-baseline sm:gap-6"
+                        >
+                          <span class="font-semibold tracking-tight transition-colors group-hover:text-accent sm:w-72 sm:shrink-0">
+                            {shortTitle(p)}
+                          </span>
+                          <span class="min-w-0 flex-1 text-sm text-muted">{p.summary}</span>
+                          <span class="hidden shrink-0 items-center gap-1.5 font-mono text-xs text-muted sm:inline-flex">
+                            {readingMinutes(p)} min
+                            <ArrowRight
+                              size={14}
+                              aria-hidden="true"
+                              className="transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent"
+                            />
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,71 @@
+---
+import { ArrowDownWideNarrow, ChevronDown, Cpu, LayoutGrid, Network, Search } from 'lucide-react';
+import { groups, posts, shortTitle, type Post } from '../data/writing';
+
+interface Props {
+  /** Slug of the post being read, if any. */
+  current?: string | undefined;
+}
+const { current } = Astro.props;
+
+const icons = {
+  'Operating Systems': Cpu,
+  Sorting: ArrowDownWideNarrow,
+  Searching: Search,
+  Graphs: Network,
+} as const satisfies Record<Post['group'], unknown>;
+
+const currentGroup = posts.find((p) => p.slug === current)?.group;
+const sections = groups
+  .map((g) => ({ name: g, Icon: icons[g], items: posts.filter((p) => p.group === g) }))
+  .filter((s) => s.items.length > 0);
+
+const item =
+  'flex min-h-10 items-center rounded-lg border border-transparent px-3 py-1.5 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=page]:border-accent aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent';
+---
+
+<nav
+  aria-label="Posts"
+  class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-1"
+>
+  <p class="mb-3 font-mono text-xs tracking-wider text-muted uppercase">Writing</p>
+  <ul class="flex flex-col gap-1">
+    <li>
+      <a href="/writing" aria-current={current === undefined ? 'page' : undefined} class={item}>
+        <LayoutGrid size={16} aria-hidden="true" className="mr-2.5 shrink-0" />
+        <span>All posts</span>
+      </a>
+    </li>
+    {
+      sections.map((s) => (
+        <li class="mt-2">
+          <details class="group" open={s.name === currentGroup}>
+            <summary class="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-3 py-1.5 font-mono text-xs tracking-wider text-muted uppercase marker:content-none hover:text-fg">
+              <s.Icon size={15} aria-hidden="true" className="shrink-0" />
+              <span>{s.name}</span>
+              <span class="ml-auto font-mono text-xs">{s.items.length}</span>
+              <ChevronDown
+                size={14}
+                aria-hidden="true"
+                className="shrink-0 transition-transform group-open:rotate-180"
+              />
+            </summary>
+            <ul class="mt-1 ml-3 flex flex-col gap-0.5 border-l border-line pl-2">
+              {s.items.map((p) => (
+                <li>
+                  <a
+                    href={`/writing/${p.slug}`}
+                    aria-current={current === p.slug ? 'page' : undefined}
+                    class={item}
+                  >
+                    {shortTitle(p)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

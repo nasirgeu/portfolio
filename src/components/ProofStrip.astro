@@ -1,0 +1,34 @@
+---
+import { ArrowUpRight } from 'lucide-react';
+import { proof } from '../data/site';
+---
+
+<section aria-label="Highlights" class="pb-4">
+  <div class="container-page">
+    <ul class="grid gap-4 sm:grid-cols-3">
+      {
+        proof.map((p, i) => {
+          const external = p.href.startsWith('http');
+          return (
+            <li class="card p-6" data-reveal data-reveal-delay={String(i * 80)}>
+              <p class="text-4xl font-bold tracking-tight">{p.value}</p>
+              <p class="mt-1 text-muted">{p.label}</p>
+              {p.href.length > 0 && (
+                <a
+                  href={p.href}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                  class="mt-4 inline-flex items-center gap-1 font-mono text-xs text-accent hover:underline"
+                >
+                  See source: {p.sourceLabel}
+                  <ArrowUpRight size={14} aria-hidden="true" />
+                  {external && <span class="sr-only">(opens in a new tab)</span>}
+                </a>
+              )}
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

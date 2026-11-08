@@ -1,0 +1,69 @@
+---
+export interface TerminalLine {
+  kind: 'cmd' | 'out';
+  text: string;
+}
+interface Props {
+  lines: TerminalLine[];
+  title?: string;
+}
+const { lines, title = 'nasir@systems: ~' } = Astro.props;
+const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).join('. ');
+---
+
+<div class="card overflow-hidden font-mono text-[0.82rem] leading-relaxed shadow-2xl shadow-black/20" data-terminal>
+  <div class="flex items-center gap-2 border-b border-line bg-surface-2 px-4 py-2.5">
+    <span class="size-2.5 rounded-full bg-line-strong"></span>
+    <span class="size-2.5 rounded-full bg-line-strong"></span>
+    <span class="size-2.5 rounded-full bg-line-strong"></span>
+    <span class="ml-2 text-xs text-muted">{title}</span>
+  </div>
+  <!-- Fixed height prevents layout shift while typing -->
+  <div class="min-h-[15.5rem] p-4 sm:min-h-[14rem]" aria-hidden="true">
+    {
+      lines.map((l) => (
+        <div class:list={['term-line', l.kind === 'cmd' ? 'text-fg' : 'text-muted']} data-kind={l.kind}>
+          {l.kind === 'cmd' && <span class="mr-2 text-accent">$</span>}
+          <span data-text>{l.text}</span>
+        </div>
+      ))
+    }
+    <div class="term-line mt-1 text-fg" data-final>
+      <span class="mr-2 text-accent">$</span><span class="caret"></span>
+    </div>
+  </div>
+  <p class="sr-only">{fullText}</p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-terminal]');
+  if (root) {
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.term-line'));
+    const reveal = (el: HTMLElement) => el.classList.add('term-on');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      rows.forEach(reveal);
+    } else {
+      const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
+      const type = async () => {
+        for (const row of rows) {
+          const target = row.querySelector<HTMLElement>('[data-text]');
+          reveal(row);
+          if (target && row.dataset.kind === 'cmd') {
+            const full = target.textContent ?? '';
+            target.textContent = '';
+            const caret = document.createElement('span');
+            caret.className = 'caret ml-0.5';
+            target.after(caret);
+            for (let i = 1; i <= full.length; i++) {
+              target.textContent = full.slice(0, i);
+              await sleep(28);
+            }
+            caret.remove();
+          }
+          await sleep(380);
+        }
+      };
+      void type();
+    }
+  }
+</script>

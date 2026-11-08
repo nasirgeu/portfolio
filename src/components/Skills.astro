@@ -1,0 +1,42 @@
+---
+import { CodeXml, Cpu, Layers, Wrench } from 'lucide-react';
+import { skillGroups, skillsIntro } from '../data/skills';
+
+const icons = { code: CodeXml, cpu: Cpu, layers: Layers, wrench: Wrench } as const;
+---
+
+<section id="skills" class="section border-t border-line" aria-labelledby="skills-title">
+  <div class="container-page">
+    <div class="mb-12" data-reveal>
+      <p class="eyebrow section-eyebrow mb-3">Technical skills</p>
+      <h2 id="skills-title" class="section-title">Technologies and tools I work with.</h2>
+      <p class="mt-4 text-lg text-muted">{skillsIntro}</p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      {
+        skillGroups.map((g, i) => {
+          const GroupIcon = icons[g.icon];
+          return (
+            <article class="card card-hover p-6 sm:p-7" data-reveal data-reveal-delay={String((i % 2) * 80)}>
+              <div class="flex items-center gap-3">
+                <span class="inline-flex size-10 items-center justify-center rounded-lg bg-accent-soft text-accent">
+                  <GroupIcon size={20} aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 class="font-semibold">{g.title}</h3>
+                  <p class="text-sm text-muted">{g.description}</p>
+                </div>
+              </div>
+              <ul class="mt-5 flex flex-wrap gap-2">
+                {g.items.map((item) => (
+                  <li class="chip !text-fg/90">{item}</li>
+                ))}
+              </ul>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import { projects, projectsSection } from '../data/projects';
+import ProjectCards from './ProjectCards';
+---
+
+<section id="projects" class="section border-t border-line" aria-labelledby="projects-title">
+  <div class="container-page">
+    <div class="mb-12" data-reveal>
+      <p class="eyebrow section-eyebrow mb-3">Featured projects</p>
+      <h2 id="projects-title" class="section-title">{projectsSection.heading}</h2>
+      {
+        projectsSection.intro.map((p) => (
+          <p class="mt-4 text-lg text-muted">{p}</p>
+        ))
+      }
+    </div>
+    <div data-reveal>
+      <ProjectCards client:visible projects={projects} />
+    </div>
+  </div>
+</section>

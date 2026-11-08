@@ -1,0 +1,30 @@
+---
+import { Download } from 'lucide-react';
+import { site } from '../data/site';
+
+interface Props {
+  variant?: 'primary' | 'secondary';
+}
+const { variant = 'primary' } = Astro.props;
+const cls = variant === 'primary' ? 'btn btn-primary' : 'btn';
+const hasResume = site.resumeUrl.length > 0;
+---
+
+{
+  hasResume ? (
+    <a href={site.resumeUrl} download={site.resumeFileName} class={cls}>
+      <Download size={18} aria-hidden="true" />
+      Download Resume
+    </a>
+  ) : (
+    <button
+      type="button"
+      class={cls}
+      aria-disabled="true"
+      title="Add your resume PDF to /public and set resumeUrl in src/data/site.ts"
+    >
+      <Download size={18} aria-hidden="true" />
+      Resume (add PDF)
+    </button>
+  )
+}

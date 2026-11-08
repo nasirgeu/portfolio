@@ -1,0 +1,19 @@
+---
+import { CalendarDays } from 'lucide-react';
+import { site } from '../data/site';
+
+interface Props {
+  variant?: 'primary' | 'secondary';
+}
+const { variant = 'secondary' } = Astro.props;
+const cls = variant === 'primary' ? 'btn btn-primary' : 'btn';
+---
+
+{
+  site.bookingUrl.length > 0 && (
+    <button type="button" class={cls} data-book-call aria-haspopup="dialog">
+      <CalendarDays size={18} aria-hidden="true" />
+      {site.bookingLabel}
+    </button>
+  )
+}

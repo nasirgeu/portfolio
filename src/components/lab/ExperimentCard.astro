@@ -1,0 +1,41 @@
+---
+import { ArrowRight } from 'lucide-react';
+import type { Experiment } from '../../data/labExperiments';
+import ExperimentPreview from './ExperimentPreview.astro';
+
+interface Props {
+  experiment: Experiment;
+}
+const { experiment: e } = Astro.props;
+---
+
+<article class="lab-card" data-reveal>
+  <div class="p-5 sm:p-6">
+    <div class="flex items-center justify-between gap-3">
+      <span class="font-mono text-xs text-muted">Experiment 0{e.order}</span>
+      <span class="lab-live">Live</span>
+    </div>
+
+    <div class="mt-4">
+      <ExperimentPreview slug={e.slug} />
+    </div>
+
+    <h2 class="mt-5 text-xl font-semibold tracking-tight">{e.name}</h2>
+    <p class="mt-1.5 text-muted">{e.cardDescription}</p>
+
+    <ul class="mt-5 flex flex-wrap gap-1.5" aria-label="Algorithms in this experiment">
+      {e.algorithms.map((a) => <li class="chip">{a}</li>)}
+    </ul>
+  </div>
+
+  <div class="mt-auto border-t border-line px-5 py-4 sm:px-6">
+    <a
+      href={`/lab/${e.slug}`}
+      class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent after:absolute after:inset-0 after:content-['']"
+    >
+      Open Experiment
+      <span class="sr-only">: {e.name}</span>
+      <ArrowRight size={16} aria-hidden="true" />
+    </a>
+  </div>
+</article>

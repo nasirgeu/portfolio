@@ -1,0 +1,57 @@
+---
+import { ArrowRight } from 'lucide-react';
+import { formatDate, posts, readingMinutes, writingSection } from '../data/writing';
+
+const latest = posts.slice(0, 3);
+---
+
+<section id="writing" class="section border-t border-line" aria-labelledby="writing-title">
+  <div class="container-page">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
+      <div class="min-w-[18rem] flex-1" data-reveal>
+        <p class="eyebrow section-eyebrow mb-3">{writingSection.eyebrow}</p>
+        <h2 id="writing-title" class="section-title">{writingSection.heading}</h2>
+        <p class="mt-4 text-lg text-muted">{writingSection.intro}</p>
+      </div>
+      {
+        posts.length > 0 && (
+          <a href="/writing" class="btn" data-reveal>
+            {writingSection.allPosts}
+            <ArrowRight size={16} aria-hidden="true" />
+          </a>
+        )
+      }
+    </div>
+
+    {
+      latest.length > 0 ? (
+        <ul class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {latest.map((p, i) => (
+            <li data-reveal data-reveal-delay={String(i * 70)}>
+              <a
+                href={`/writing/${p.slug}`}
+                class="card card-hover group flex h-full flex-col gap-3 p-6 focus-visible:outline-offset-2"
+              >
+                <span class="font-mono text-xs text-muted">
+                  {formatDate(p.date)} · {readingMinutes(p)} min read
+                </span>
+                <span class="text-lg font-semibold tracking-tight">{p.title}</span>
+                <span class="text-sm text-muted">{p.summary}</span>
+                <span class="mt-auto inline-flex items-center gap-1.5 pt-2 font-mono text-xs text-accent">
+                  Read post
+                  <ArrowRight
+                    size={14}
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-muted">{writingSection.emptyNote}</p>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,56 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+const links = [
+  { label: 'About', href: '/#about' },
+  { label: 'Experience', href: '/#experience' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Engineering Lab', href: '/lab' },
+  { label: 'Writing', href: '/writing' },
+  { label: 'Contact', href: '/#contact' },
+];
+const socials = site.socials.filter((s) => s.url.length > 0);
+---
+
+<footer class="border-t border-line py-10">
+  <div class="container-page flex flex-col gap-8">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <p class="font-mono text-sm font-semibold tracking-tight">{site.name}</p>
+        <p class="mt-1 max-w-xs text-sm text-muted">Software Engineer building fast and reliable software with C++.</p>
+      </div>
+      <nav aria-label="Footer">
+        <ul class="flex flex-wrap gap-x-6 gap-y-1">
+          {
+            links.map((l) => (
+              <li>
+                <a href={l.href} class="inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-accent">
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-accent"
+                >
+                  {s.label}
+                  <span class="sr-only"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+    <div class="flex flex-col items-center justify-between gap-3 border-t border-line pt-6 text-sm text-muted sm:flex-row">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p class="font-mono text-xs">Built with Astro, Tailwind CSS &amp; TypeScript.</p>
+    </div>
+  </div>
+</footer>

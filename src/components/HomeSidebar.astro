@@ -1,0 +1,57 @@
+---
+import { Briefcase, Cpu, FlaskConical, Folder, GraduationCap, Mail, PenLine, Trophy, User } from 'lucide-react';
+
+// The same order as the sections on the page, so the numbers match the section numbers (01 / ABOUT ...).
+const sections = [
+  { id: 'about', label: 'About', Icon: User },
+  { id: 'experience', label: 'Experience', Icon: Briefcase },
+  { id: 'skills', label: 'Skills', Icon: Cpu },
+  { id: 'projects', label: 'Projects', Icon: Folder },
+  { id: 'lab-preview', label: 'Engineering Lab', Icon: FlaskConical },
+  { id: 'writing', label: 'Writing', Icon: PenLine },
+  { id: 'achievements', label: 'Competitive', Icon: Trophy },
+  { id: 'education', label: 'Education', Icon: GraduationCap },
+  { id: 'contact', label: 'Contact', Icon: Mail },
+] as const;
+
+const item =
+  'flex min-h-10 items-center gap-2.5 rounded-lg border border-transparent px-3 py-1.5 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=true]:border-accent aria-[current=true]:bg-accent-soft aria-[current=true]:text-accent';
+---
+
+{/* On phones and tablets the menu is a row of buttons that scrolls sideways. */}
+<nav aria-label="Jump to a section" class="-mx-4 min-w-0 overflow-x-auto px-4 pb-1 lg:hidden">
+  <ul class="flex w-max gap-2">
+    {
+      sections.map((s) => (
+        <li>
+          <a
+            href={`#${s.id}`}
+            data-side-link
+            class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm whitespace-nowrap text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=true]:border-accent aria-[current=true]:bg-accent-soft aria-[current=true]:text-accent"
+          >
+            {s.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<nav aria-label="On this page" class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block">
+  <p class="mb-3 font-mono text-xs tracking-wider text-muted uppercase">On this page</p>
+  <ul class="flex flex-col gap-1">
+    {
+      sections.map((s, i) => (
+        <li>
+          <a href={`#${s.id}`} data-side-link class={item}>
+            <s.Icon size={16} aria-hidden="true" className="shrink-0" />
+            <span>
+              <span class="mr-1 font-mono text-xs">{String(i + 1).padStart(2, '0')}</span>
+              {s.label}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

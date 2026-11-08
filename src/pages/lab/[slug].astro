@@ -1,0 +1,72 @@
+---
+import LabLayout from '../../layouts/LabLayout.astro';
+import LabHeader from '../../components/lab/LabHeader.astro';
+import LabSidebar from '../../components/lab/LabSidebar.astro';
+import ExperimentWorkspace from '../../components/lab/ExperimentWorkspace.astro';
+import TechnicalDetails from '../../components/lab/TechnicalDetails.astro';
+import ExperimentNavigation from '../../components/lab/ExperimentNavigation.astro';
+import PageReplacementDemo from '../../components/PageReplacementDemo';
+import SchedulingDemo from '../../components/SchedulingDemo';
+import AllocatorDemo from '../../components/AllocatorDemo';
+import SortingDemo from '../../components/SortingDemo';
+import SearchingDemo from '../../components/SearchingDemo';
+import GraphDemo from '../../components/GraphDemo';
+import DesignDiagram from '../../components/DesignDiagram';
+import { pipelineDiagram } from '../../data/pipelineDiagrams';
+import { experiments, getNeighbours, type Experiment } from '../../data/labExperiments';
+
+export function getStaticPaths() {
+  return experiments.map((experiment) => ({ params: { slug: experiment.slug }, props: { experiment } }));
+}
+
+interface Props {
+  experiment: Experiment;
+}
+const { experiment } = Astro.props;
+const { prev, next } = getNeighbours(experiment.slug);
+---
+
+<LabLayout
+  title={`${experiment.name} | Engineering Lab | Mohd Nasir`}
+  description={experiment.seoDescription}
+>
+  <!-- Experiments list on the left; inputs and controls, then the visualization, top to bottom on the right. -->
+  <div class="lab-page">
+    <LabHeader experiment={experiment} />
+
+    <div class="lab-container min-w-0 pb-24">
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-[13rem_minmax(0,1fr)]">
+        <LabSidebar current={experiment.slug} />
+
+        <div class="min-w-0">
+          <ExperimentWorkspace>
+            {experiment.slug === 'page-replacement' && <PageReplacementDemo client:visible />}
+            {experiment.slug === 'cpu-scheduling' && <SchedulingDemo client:visible />}
+            {experiment.slug === 'memory-allocation' && <AllocatorDemo client:visible />}
+            {experiment.slug === 'sorting' && <SortingDemo client:visible />}
+            {experiment.slug === 'searching' && <SearchingDemo client:visible />}
+            {experiment.slug === 'graph-algorithms' && <GraphDemo client:visible />}
+          </ExperimentWorkspace>
+
+          <section aria-labelledby="hood-title" class="mt-8">
+            <p class="font-mono text-xs tracking-wider text-accent uppercase">Under the hood</p>
+            <h2 id="hood-title" class="mt-1 text-xl font-semibold tracking-tight">From input to screen</h2>
+            <p class="mt-2 mb-4 text-sm text-muted">
+              The experiment follows this process. Select any box to see what it does and which function or component is behind
+              it.
+            </p>
+            <DesignDiagram
+              client:visible
+              title="Pipeline: input, parsing, simulation, steps, visualization"
+              nodes={pipelineDiagram(experiment.slug)}
+              defaultOpen
+            />
+          </section>
+
+          <TechnicalDetails experiment={experiment} />
+          <ExperimentNavigation prev={prev} next={next} />
+        </div>
+      </div>
+    </div>
+  </div>
+</LabLayout>

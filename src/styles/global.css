@@ -1,0 +1,481 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* ---------- Design tokens ---------- */
+:root {
+  color-scheme: dark;
+  --bg: #090c12;
+  --surface: #0e131c;
+  --surface-2: #141b27;
+  --border: #1e2735;
+  --border-strong: #2c3a4f;
+  --fg: #e9eef6;
+  --muted: #8c99ad;
+  --accent: #38bdf8;
+  --accent-fg: #04111a;
+  --accent-soft: rgb(56 189 248 / 0.12);
+  --warn: #f5a524;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-2: #eaf0f7;
+  --border: #d5deea;
+  --border-strong: #b6c3d4;
+  --fg: #0e1726;
+  --muted: #4e5d74;
+  --accent: #0369a1;
+  --accent-fg: #ffffff;
+  --accent-soft: rgb(3 105 161 / 0.09);
+  --warn: #b45309;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-warn: var(--warn);
+  --text-xs: 0.8rem;
+  --text-xs--line-height: 1.4;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+/* On large screens everything sized in rem is a little smaller, so text does not feel oversized. */
+@media (min-width: 1024px) {
+  html {
+    font-size: 93.75%;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01';
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* Premium touches: thin themed scrollbar, balanced headings, tidier paragraph endings. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Section numbers: 01 / ABOUT, 02 / EXPERIENCE ... counted automatically in page order. */
+body {
+  counter-reset: sec;
+}
+.section-eyebrow::before {
+  counter-increment: sec;
+  content: counter(sec, decimal-leading-zero) ' / ';
+  color: var(--muted);
+}
+
+/* Reading progress line under the navbar. Pure CSS: it only appears where scroll-driven animation is supported. */
+.scroll-progress {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      display: block;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes scroll-progress {
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+}
+
+/* Portrait in the About section: a cool tint and a fade into the page colour, in the dark theme only. */
+.portrait-tint {
+  display: none;
+}
+:root[data-theme='dark'] .portrait-tint {
+  display: block;
+  background:
+    linear-gradient(to top, color-mix(in srgb, var(--bg) 70%, transparent), transparent 55%),
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%);
+}
+
+/* Soft accent light behind the hero text. */
+.hero-glow {
+  background:
+    radial-gradient(42rem 24rem at 12% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    radial-gradient(30rem 20rem at 85% 30%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- Layout helpers ---------- */
+.container-page {
+  width: min(100% - 2rem, 84rem);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(3.25rem, 6vw, 5rem);
+}
+
+/* On the Home page the sections sit in the right-hand column, so they fill it instead of centring their own container. */
+.home-body .container-page {
+  width: 100%;
+}
+.home-body > section:first-child {
+  border-top: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 650;
+  text-wrap: balance;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  /* A faint top edge highlight gives cards a little depth. */
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--fg) 5%, transparent);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.card-hover {
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+.card-hover:hover,
+.card-hover:focus-within {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -24px var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-hover:hover,
+  .card-hover:focus-within {
+    transform: none;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: var(--bg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: 0.65rem;
+  font-weight: 550;
+  font-size: 0.95rem;
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+.btn:hover {
+  background: var(--surface-2);
+  border-color: var(--muted);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent);
+  filter: brightness(1.08);
+  border-color: var(--accent);
+}
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Hero background: "memory map" ---------- */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 30% 0%, #000 10%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 30% 0%, #000 10%, transparent 70%);
+  opacity: 0.5;
+}
+
+.mem-cell {
+  background: var(--accent);
+  opacity: 0.06;
+  border-radius: 2px;
+  animation: mem-blink 5s ease-in-out infinite;
+}
+@keyframes mem-blink {
+  0%,
+  100% {
+    opacity: 0.05;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.1em;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  animation: caret 1s steps(1) infinite;
+}
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.status-dot {
+  position: relative;
+}
+.status-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: inherit;
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ---------- Scroll reveal (progressive enhancement) ---------- */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* ---------- Expandable card ---------- */
+.expand {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.expand[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+.expand > div {
+  overflow: hidden;
+}
+
+/* ---------- Code ---------- */
+.tok-k {
+  color: #7dd3fc;
+}
+.tok-t {
+  color: var(--accent);
+}
+.tok-n {
+  color: #fca5a5;
+}
+.tok-c {
+  color: var(--muted);
+  font-style: italic;
+}
+:root[data-theme='light'] .tok-k {
+  color: #0369a1;
+}
+:root[data-theme='light'] .tok-n {
+  color: #b91c1c;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  .mem-cell {
+    opacity: 0.12;
+  }
+}
+
+/* ---------- Hero entrance (pure CSS so it never waits on JavaScript) ---------- */
+[data-hero] {
+  animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hero headline typing: letters appear one by one, then a caret blinks a few times and disappears. */
+.type-char {
+  animation: type-char 0.01s both;
+}
+@keyframes type-char {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.type-caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.12em;
+  vertical-align: -0.08em;
+  background: var(--accent);
+  opacity: 0;
+  animation: type-caret 0.9s steps(1) 5 both;
+}
+@keyframes type-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Terminal rows stay hidden until the script reveals them (visible by default without JS) */
+.js .term-line:not(.term-on) {
+  visibility: hidden;
+}
+
+/* Make the [hidden] attribute win over display utilities (e.g. inline-flex) */
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- Booking dialog ---------- */
+.book-dialog {
+  width: min(100vw - 2rem, 56rem);
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 1rem;
+}
+.book-dialog::backdrop {
+  background: rgb(0 0 0 / 0.65);
+}
+
+/* ---------- Scheduling chart: a part grows in when its step is reached ---------- */
+.gantt-seg {
+  transform-origin: left center;
+  animation: gantt-grow 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes gantt-grow {
+  from {
+    opacity: 0;
+    transform: scaleX(0.15);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

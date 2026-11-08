@@ -1,0 +1,74 @@
+---
+import { experience } from '../data/site';
+---
+
+<section id="experience" class="section border-t border-line" aria-labelledby="experience-title">
+  <div class="container-page">
+    <div class="mb-12" data-reveal>
+      <p class="eyebrow section-eyebrow mb-3">Experience</p>
+      <h2 id="experience-title" class="section-title">My professional journey.</h2>
+    </div>
+
+    <p class="mb-6 ml-2 font-mono text-sm text-muted sm:ml-4" aria-hidden="true" data-reveal>
+      <span class="text-accent">$</span> git log --oneline --graph
+    </p>
+
+    <ol class="relative ml-2 border-l border-line pl-8 sm:ml-4 sm:pl-10">
+      {
+        experience.map((job) => (
+          <li class="relative mb-6 last:mb-0" data-reveal>
+            <span
+              class:list={[
+                'absolute top-2 -left-[2.55rem] size-3 rounded-full border-2 border-accent sm:-left-[3.05rem]',
+                job.period.includes('Present') ? 'bg-accent shadow-[0_0_0_4px_var(--accent-soft)]' : 'bg-bg',
+              ]}
+              aria-hidden="true"
+            />
+            <div class="card p-6 sm:p-8">
+              {
+                job.period.includes('Present') && (
+                  <p class="mb-3 inline-block rounded-md bg-accent-soft px-2 py-0.5 font-mono text-xs text-accent" aria-hidden="true">
+                    HEAD → main
+                  </p>
+                )
+              }
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h3 class="text-xl font-semibold">
+                  {job.role} <span class="text-muted">@ {job.company}</span>
+                </h3>
+                <p class="font-mono text-sm text-muted">{job.period} · {job.location}</p>
+              </div>
+              {
+                job.roles && (
+                  <ul class="mt-4 space-y-1.5 border-l border-line pl-4" aria-label="Roles at this company">
+                    {job.roles.map((r) => (
+                      <li class="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
+                        <span class="font-medium">{r.title}</span>
+                        <span class="font-mono text-muted">{r.period}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )
+              }
+              <p class="mt-4 text-muted">{job.summary}</p>
+              <p class="mt-6 font-mono text-sm text-muted">My contributions:</p>
+              <ul class="mt-3 space-y-2.5">
+                {job.points.map((pt) => (
+                  <li class="flex gap-3">
+                    <span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                    <span>{pt}</span>
+                  </li>
+                ))}
+              </ul>
+              <ul class="mt-6 flex flex-wrap gap-2" aria-label="Technologies">
+                {job.tech.map((t) => (
+                  <li class="chip">{t}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

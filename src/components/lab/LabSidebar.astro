@@ -1,0 +1,87 @@
+---
+import { ArrowDownWideNarrow, ArrowLeft, Cpu, Layers, LayoutGrid, MemoryStick, Network, Search } from 'lucide-react';
+import { experimentsByGroup, groupInfo, type ExperimentGroup, type ExperimentSlug } from '../../data/labExperiments';
+
+interface Props {
+  current?: ExperimentSlug | undefined;
+}
+const { current } = Astro.props;
+
+const icons = {
+  'page-replacement': Layers,
+  'cpu-scheduling': Cpu,
+  'memory-allocation': MemoryStick,
+  sorting: ArrowDownWideNarrow,
+  searching: Search,
+  'graph-algorithms': Network,
+} as const;
+const groups: ExperimentGroup[] = ['os', 'algorithms'];
+
+const item =
+  'flex min-h-11 items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 text-sm text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=page]:border-accent aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent';
+---
+
+{/* On phones and tablets the sidebar is hidden, so the experiments are a row of buttons that scrolls sideways. */}
+<nav aria-label="Switch experiment" class="-mx-4 min-w-0 overflow-x-auto px-4 pb-1 lg:hidden">
+  <ul class="flex w-max gap-2">
+    <li>
+      <a
+        href="/lab"
+        aria-current={current === undefined ? 'page' : undefined}
+        class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm whitespace-nowrap text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=page]:border-accent aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent"
+      >
+        {current === undefined ? 'Lab overview' : '← Back to Lab'}
+      </a>
+    </li>
+    {
+      groups.flatMap((g) =>
+        experimentsByGroup(g).map((e) => (
+          <li>
+            <a
+              href={`/lab/${e.slug}`}
+              aria-current={current === e.slug ? 'page' : undefined}
+              class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm whitespace-nowrap text-muted transition-colors hover:border-line-strong hover:text-fg aria-[current=page]:border-accent aria-[current=page]:bg-accent-soft aria-[current=page]:text-accent"
+            >
+              {e.name}
+            </a>
+          </li>
+        )),
+      )
+    }
+  </ul>
+</nav>
+
+<nav aria-label="Lab experiments" class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block">
+  <p class="mb-3 font-mono text-xs tracking-wider text-muted uppercase">Experiments</p>
+  <ul class="flex flex-col gap-1">
+    <li>
+      <a href="/lab" aria-current={current === undefined ? 'page' : undefined} class={item}>
+        {current === undefined ? <LayoutGrid size={16} aria-hidden="true" /> : <ArrowLeft size={16} aria-hidden="true" />}
+        <span>{current === undefined ? 'Lab overview' : 'Back to Lab'}</span>
+      </a>
+    </li>
+    {
+      groups.map((g) => (
+        <li class="mt-3">
+          <p class="mb-1.5 px-3 font-mono text-xs tracking-wider text-muted uppercase">{groupInfo[g].label}</p>
+          <ul class="flex flex-col gap-1">
+            {experimentsByGroup(g).map((e) => {
+              const Icon = icons[e.slug];
+              return (
+                <li>
+                  <a href={`/lab/${e.slug}`} aria-current={current === e.slug ? 'page' : undefined} class={item}>
+                    <Icon size={16} aria-hidden="true" className="shrink-0" />
+                    <span>
+                      <span class="mr-1 font-mono text-xs">0{e.order}</span>
+                      {e.name}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

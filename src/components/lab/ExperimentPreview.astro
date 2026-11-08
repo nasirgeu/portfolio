@@ -1,0 +1,201 @@
+---
+/**
+ * Small decorative preview for each experiment card, built from plain HTML and CSS
+ * (no JavaScript, no images). It is hidden from screen readers because the card
+ * text already describes the experiment.
+ */
+import type { ExperimentSlug } from '../../data/labExperiments';
+
+interface Props {
+  slug: ExperimentSlug;
+}
+const { slug } = Astro.props;
+
+// Page replacement: LRU with 3 frames on the start of the classic request list.
+const requests = [7, 0, 1, 2, 0, 3, 0, 4];
+const frames = [
+  [7, 7, 7, 2, 2, 2, 2, 4],
+  [0, 0, 0, 0, 0, 0, 0, 0].map((v, i) => (i === 0 ? '' : v)),
+  ['', '', 1, 1, 1, 3, 3, 3],
+];
+const result = ['F', 'F', 'F', 'F', 'H', 'F', 'H', 'F'];
+
+// CPU scheduling: the SRTF example chart (A 0-1, B 1-5, D 5-10, A 10-17, C 17-26).
+const parts = [
+  { id: 'A', from: 0, to: 1 },
+  { id: 'B', from: 1, to: 5 },
+  { id: 'D', from: 5, to: 10 },
+  { id: 'A', from: 10, to: 17 },
+  { id: 'C', from: 17, to: 26 },
+];
+
+// Memory allocation: 48 units after A, C and E were freed.
+const blocks = [
+  { id: '', size: 10 },
+  { id: 'B', size: 2 },
+  { id: '', size: 5 },
+  { id: 'D', size: 2 },
+  { id: '', size: 7 },
+  { id: 'F', size: 2 },
+  { id: 'G', size: 12 },
+  { id: '', size: 8 },
+];
+
+// Sorting: bars partway through a sort (the last two are in their final place).
+const bars = [4, 2, 6, 1, 5, 3, 7, 8];
+const barState = ['', '', 'cmp', 'cmp', '', '', 'done', 'done'];
+
+// Searching: binary search for 11 in a sorted list. The left half is already ruled out.
+const cells = [1, 3, 5, 7, 9, 11, 13, 15];
+
+// Graph: a small weighted graph with a shortest-path tree from A highlighted.
+const gNodes: Record<string, [number, number]> = { A: [30, 60], B: [105, 22], C: [105, 98], D: [195, 22], E: [195, 98], F: [265, 60] };
+const gEdges: [string, string, boolean][] = [
+  ['A', 'B', true],
+  ['A', 'C', true],
+  ['B', 'C', false],
+  ['B', 'D', true],
+  ['C', 'E', true],
+  ['D', 'E', false],
+  ['D', 'F', false],
+  ['E', 'F', true],
+];
+---
+
+<div class="rounded-lg border border-line bg-bg p-4" aria-hidden="true">
+  {
+    slug === 'page-replacement' && (
+      <div class="grid grid-cols-8 gap-1.5 font-mono text-xs">
+        {requests.map((r) => (
+          <div class="py-0.5 text-center text-muted">{r}</div>
+        ))}
+        {frames.map((row) =>
+          row.map((v) => (
+            <div class:list={['pv-cell pv-scan flex h-7 items-center justify-center', v === '' ? 'opacity-40' : '']}>
+              {v}
+            </div>
+          )),
+        )}
+        {result.map((r) => (
+          <div class:list={['pv-cell flex h-6 items-center justify-center', r === 'H' ? 'pv-hit' : 'pv-fault']}>{r}</div>
+        ))}
+      </div>
+    )
+  }
+  {
+    slug === 'cpu-scheduling' && (
+      <div>
+        <div class="relative h-12">
+          {parts.map((p, i) => (
+            <div
+              class="pv-bar absolute top-0 flex h-12 items-center justify-center rounded border border-accent/60 bg-accent-soft font-mono text-xs font-semibold text-accent"
+              style={`left:${(p.from / 26) * 100}%;width:${((p.to - p.from) / 26) * 100}%;--d:${i * 90}ms`}
+            >
+              {p.id}
+            </div>
+          ))}
+        </div>
+        <div class="relative mt-1 h-4 font-mono text-xs text-muted">
+          {[0, 1, 5, 10, 17, 26].map((t) => (
+            <span class="absolute -translate-x-1/2" style={`left:${(t / 26) * 100}%`}>
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  {
+    slug === 'memory-allocation' && (
+      <div>
+        <div class="flex h-12 gap-px overflow-hidden rounded">
+          {blocks.map((b, i) => (
+            <div
+              class:list={[
+                'pv-bar flex items-center justify-center border font-mono text-xs font-semibold',
+                b.id === ''
+                  ? 'border-dashed border-line-strong text-muted'
+                  : 'border-accent/60 bg-accent-soft text-accent',
+              ]}
+              style={`width:${(b.size / 48) * 100}%;--d:${i * 70}ms`}
+            >
+              {b.id}
+            </div>
+          ))}
+        </div>
+        <div class="mt-1 flex justify-between font-mono text-xs text-muted">
+          <span>0</span>
+          <span>48</span>
+        </div>
+      </div>
+    )
+  }
+  {
+    slug === 'sorting' && (
+      <div class="flex h-24 items-end gap-1.5">
+        {bars.map((h, i) => (
+          <div
+            class:list={[
+              'pv-bar flex-1 rounded-t border',
+              barState[i] === 'done'
+                ? 'border-accent bg-accent-soft'
+                : barState[i] === 'cmp'
+                  ? 'border-warn bg-surface-2'
+                  : 'border-line-strong bg-surface',
+            ]}
+            style={`height:${(h / 8) * 100}%;--d:${i * 60}ms`}
+          />
+        ))}
+      </div>
+    )
+  }
+  {
+    slug === 'searching' && (
+      <div>
+        <div class="grid grid-cols-8 gap-1.5 font-mono text-xs">
+          {cells.map((c, i) => (
+            <div
+              class:list={[
+                'pv-cell flex h-11 items-center justify-center',
+                i === 5 ? 'pv-hit font-semibold' : i < 4 ? 'opacity-30' : '',
+              ]}
+            >
+              {c}
+            </div>
+          ))}
+        </div>
+        <div class="mt-1.5 grid grid-cols-8 gap-1.5 font-mono text-xs text-muted">
+          {cells.map((_, i) => (
+            <span class="text-center">{i === 3 ? 'mid' : i === 5 ? 'found' : ''}</span>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  {
+    slug === 'graph-algorithms' && (
+      <svg viewBox="0 0 295 120" class="h-24 w-full" role="presentation">
+        {gEdges.map(([a, b, tree]) => {
+          const [x1, y1] = gNodes[a] as [number, number];
+          const [x2, y2] = gNodes[b] as [number, number];
+          return (
+            <line
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={tree ? 'var(--accent)' : 'var(--border-strong)'}
+              stroke-width={tree ? 2.5 : 1.5}
+            />
+          );
+        })}
+        {Object.entries(gNodes).map(([id, [x, y]]) => (
+          <g>
+            <circle cx={x} cy={y} r="13" fill="var(--surface)" stroke={id === 'A' ? 'var(--accent)' : 'var(--border-strong)'} stroke-width="2" />
+            <text x={x} y={y + 4} text-anchor="middle" font-size="12" font-weight="600" fill="var(--fg)" font-family="monospace">{id}</text>
+          </g>
+        ))}
+      </svg>
+    )
+  }
+</div>

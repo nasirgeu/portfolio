@@ -1,0 +1,45 @@
+---
+import { ArrowLeft, ArrowRight, LayoutGrid } from 'lucide-react';
+import type { Experiment } from '../../data/labExperiments';
+
+interface Props {
+  prev?: Experiment | undefined;
+  next?: Experiment | undefined;
+}
+const { prev, next } = Astro.props;
+const link =
+  'group flex min-h-16 flex-col justify-center rounded-xl border border-line bg-surface px-4 py-3 transition-colors hover:border-accent';
+---
+
+<nav aria-label="More experiments" class="mt-10 grid gap-3 sm:grid-cols-3">
+  {
+    prev ? (
+      <a href={`/lab/${prev.slug}`} class={link} rel="prev">
+        <span class="flex items-center gap-1.5 font-mono text-xs text-muted">
+          <ArrowLeft size={14} aria-hidden="true" /> Previous experiment
+        </span>
+        <span class="mt-0.5 font-semibold group-hover:text-accent">{prev.name}</span>
+      </a>
+    ) : (
+      <span class="hidden sm:block" aria-hidden="true" />
+    )
+  }
+  <a href="/lab" class={`${link} items-center text-center`}>
+    <span class="flex items-center gap-1.5 font-mono text-xs text-muted">
+      <LayoutGrid size={14} aria-hidden="true" /> Back to all experiments
+    </span>
+    <span class="mt-0.5 font-semibold group-hover:text-accent">Engineering Lab</span>
+  </a>
+  {
+    next ? (
+      <a href={`/lab/${next.slug}`} class={`${link} sm:items-end sm:text-right`} rel="next">
+        <span class="flex items-center gap-1.5 font-mono text-xs text-muted">
+          Next experiment <ArrowRight size={14} aria-hidden="true" />
+        </span>
+        <span class="mt-0.5 font-semibold group-hover:text-accent">{next.name}</span>
+      </a>
+    ) : (
+      <span class="hidden sm:block" aria-hidden="true" />
+    )
+  }
+</nav>

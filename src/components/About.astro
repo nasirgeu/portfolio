@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import { about, site } from '../data/site';
+import portrait from '../assets/nasir.jpg';
+---
+
+<section id="about" class="section border-t border-line" aria-labelledby="about-title">
+  <div class="container-page">
+    <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
+      <div>
+        <div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8" data-reveal>
+          {/* In the dark theme the photo is dimmed and blended into the page colour so it does not glare. */}
+          <div class="portrait relative size-32 shrink-0 overflow-hidden rounded-2xl border border-line-strong shadow-xl shadow-black/20 sm:size-40">
+            <Image
+              src={portrait}
+              alt={`Portrait of ${site.name}`}
+              width={320}
+              height={320}
+              densities={[1, 2]}
+              loading="lazy"
+              decoding="async"
+              class="size-full object-cover [[data-theme=dark]_&]:brightness-[0.72] [[data-theme=dark]_&]:contrast-[1.05] [[data-theme=dark]_&]:saturate-[0.85]"
+            />
+            <div class="portrait-tint pointer-events-none absolute inset-0" aria-hidden="true"></div>
+          </div>
+          <div>
+            <p class="eyebrow section-eyebrow mb-3">About</p>
+            <h2 id="about-title" class="section-title">{about.heading}</h2>
+          </div>
+        </div>
+        <div class="space-y-5 text-lg text-muted" data-reveal data-reveal-delay="80">
+          {about.paragraphs.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+      <div class="self-start">
+      <p class="mb-4 font-mono text-sm text-muted" data-reveal>{about.principlesLabel}:</p>
+      <ul class="grid gap-4">
+        {
+          about.principles.map((p, i) => (
+            <li class="card card-hover p-6" data-reveal data-reveal-delay={String(i * 80)}>
+              <p class="font-mono text-sm text-accent">0{i + 1}</p>
+              <h3 class="mt-2 text-lg font-semibold">{p.title}</h3>
+              <p class="mt-1 text-muted">{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      </div>
+    </div>
+  </div>
+</section>

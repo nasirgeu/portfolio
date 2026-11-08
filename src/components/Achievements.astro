@@ -1,0 +1,63 @@
+---
+import { Award, Medal, Target, Trophy, ArrowUpRight } from 'lucide-react';
+import { achievements, competitive } from '../data/achievements';
+import { site } from '../data/site';
+
+const icons = { trophy: Trophy, medal: Medal, target: Target, award: Award } as const;
+const leetcode = site.socials.find((s) => s.label === 'LeetCode' && s.url.length > 0);
+const isDev = import.meta.env.DEV;
+---
+
+<section id="achievements" class="section border-t border-line" aria-labelledby="achievements-title">
+  <div class="container-page">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
+      <div class="min-w-[18rem] flex-1" data-reveal>
+        <p class="eyebrow section-eyebrow mb-3">Competitive programming</p>
+        <h2 id="achievements-title" class="section-title">{competitive.heading}</h2>
+        <p class="mt-4 text-lg text-muted">{competitive.intro}</p>
+      </div>
+      {
+        leetcode && (
+          <a href={leetcode.url} target="_blank" rel="noopener noreferrer" class="btn" data-reveal>
+            {competitive.buttonLabel} <ArrowUpRight size={18} aria-hidden="true" />
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
+        )
+      }
+    </div>
+
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        achievements.map((a, i) => {
+          const AIcon = icons[a.icon];
+          return (
+            <li
+              class="card card-hover group relative overflow-hidden p-6 hover:-translate-y-0.5"
+              data-reveal
+              data-reveal-delay={String((i % 3) * 80)}
+            >
+              <div class="flex items-start justify-between">
+                <span class="inline-flex size-10 items-center justify-center rounded-lg bg-accent-soft text-accent transition-transform duration-300 group-hover:scale-110">
+                  <AIcon size={20} aria-hidden="true" />
+                </span>
+                {isDev && !a.verified && (
+                  <span class="chip !border-warn !text-warn">verify before publishing</span>
+                )}
+              </div>
+              <p
+                class:list={[
+                  'mt-6 font-bold tracking-tight text-balance',
+                  a.value.length > 9 ? 'text-3xl' : 'text-4xl',
+                ]}
+              >
+                {a.value}
+              </p>
+              <h3 class="mt-1 font-medium">{a.label}</h3>
+              <p class="mt-2 text-sm text-muted">{a.detail}</p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

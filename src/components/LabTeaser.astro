@@ -1,0 +1,62 @@
+---
+import { ArrowDownWideNarrow, ArrowRight, Cpu, Layers, MemoryStick, Network, Search } from 'lucide-react';
+import { experiments, totalAlgorithms } from '../data/labExperiments';
+
+const icons = {
+  'page-replacement': Layers,
+  'cpu-scheduling': Cpu,
+  'memory-allocation': MemoryStick,
+  sorting: ArrowDownWideNarrow,
+  searching: Search,
+  'graph-algorithms': Network,
+} as const;
+---
+
+<section id="lab-preview" class="section border-t border-line" aria-labelledby="lab-preview-title">
+  <div class="container-page">
+    <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
+      <div class="min-w-[18rem] flex-1" data-reveal>
+        <p class="eyebrow section-eyebrow mb-3">Engineering Lab</p>
+        <h2 id="lab-preview-title" class="section-title">Don't just read about it. Try it yourself.</h2>
+        <p class="mt-4 text-lg text-muted">
+          Explore {experiments.length} interactive experiments covering {totalAlgorithms} algorithms. Change the inputs, go
+          through each step and understand why the algorithm makes each decision.
+        </p>
+      </div>
+      <a href="/lab" class="btn btn-primary" data-reveal>
+        Open the Lab
+        <ArrowRight size={16} aria-hidden="true" />
+      </a>
+    </div>
+
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        experiments.map((e, i) => {
+          const Icon = icons[e.slug];
+          return (
+            <li data-reveal data-reveal-delay={String((i % 3) * 70)}>
+              <a
+                href={`/lab/${e.slug}`}
+                class="card card-hover group relative flex h-full flex-col gap-3 p-5 focus-visible:outline-offset-2"
+              >
+                <span class="flex items-center justify-between">
+                  <span class="inline-flex size-10 items-center justify-center rounded-lg border border-accent/50 bg-accent-soft text-accent">
+                    <Icon size={20} aria-hidden="true" />
+                  </span>
+                  <ArrowRight
+                    size={18}
+                    aria-hidden="true"
+                    className="text-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent"
+                  />
+                </span>
+                <span class="text-lg font-semibold tracking-tight">{e.name}</span>
+                <span class="text-sm text-muted">{e.teaser}</span>
+                <span class="mt-auto font-mono text-xs text-muted">{e.algorithms.length} algorithms</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

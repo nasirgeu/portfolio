@@ -1,0 +1,161 @@
+---
+import type { Experiment } from '../../data/labExperiments';
+
+interface Props {
+  experiment: Experiment;
+}
+const { experiment } = Astro.props;
+const t = experiment.technical;
+
+const summary =
+  'flex min-h-12 cursor-pointer items-center justify-between gap-3 px-5 py-3 font-semibold marker:content-none';
+const label = 'font-mono text-xs tracking-wider text-muted uppercase';
+---
+
+<section aria-labelledby="tech-title" class="mt-8">
+  <div class="mb-4 flex items-end justify-between gap-4">
+    <div>
+      <p class="font-mono text-xs tracking-wider text-accent uppercase">Technical notes</p>
+      <h2 id="tech-title" class="mt-1 text-xl font-semibold tracking-tight">How {experiment.name} works</h2>
+    </div>
+  </div>
+
+  <div class="lab-panel divide-y divide-line">
+    <details open class="group">
+      <summary class={summary}>
+        How the algorithm works
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <div class="space-y-3 px-5 pb-5 text-muted">{t.how.map((p) => <p>{p}</p>)}</div>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Important steps
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <ol class="space-y-2 px-5 pb-5">
+        {
+          t.steps.map((s, i) => (
+            <li class="flex gap-3">
+              <span class="mt-0.5 font-mono text-xs text-accent">{String(i + 1).padStart(2, '0')}</span>
+              <span>{s}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Relevant variables
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <dl class="grid gap-x-6 gap-y-3 px-5 pb-5 sm:grid-cols-2">
+        {
+          t.variables.map((v) => (
+            <div>
+              <dt class="font-mono text-sm text-accent">{v.name}</dt>
+              <dd class="text-sm text-muted">{v.meaning}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Time and space complexity
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <div class="px-5 pb-5">
+        <div class="overflow-x-auto rounded-lg border border-line bg-bg">
+          <table class="w-full border-collapse font-mono text-sm">
+            <caption class="sr-only">Time and space complexity of this implementation</caption>
+            <thead>
+              <tr class="text-left text-xs text-muted">
+                <th scope="col" class="px-3 py-2 font-normal">Algorithm</th>
+                <th scope="col" class="px-3 py-2 font-normal">Time</th>
+                <th scope="col" class="px-3 py-2 font-normal">Space</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                t.complexity.map((r) => (
+                  <tr class="border-t border-line">
+                    <th scope="row" class="px-3 py-2 text-left font-semibold">{r.algorithm}</th>
+                    <td class="px-3 py-2 text-accent">{r.time}</td>
+                    <td class="px-3 py-2 text-accent">{r.space}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-sm text-muted">{t.complexityNote}</p>
+      </div>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Example input and output
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <div class="grid gap-4 px-5 pb-5 md:grid-cols-2">
+        <div>
+          <p class={label}>Input</p>
+          <ul class="mt-2 space-y-1 rounded-lg border border-line bg-bg p-3 font-mono text-xs break-words">
+            {t.example.input.map((l) => <li>{l}</li>)}
+          </ul>
+        </div>
+        <div>
+          <p class={label}>Output</p>
+          <ul class="mt-2 space-y-1 rounded-lg border border-line bg-bg p-3 min-w-0 font-mono text-xs [overflow-wrap:anywhere] text-accent">
+            {t.example.output.map((l) => <li>{l}</li>)}
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Edge cases
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <ul class="space-y-2 px-5 pb-5">
+        {
+          t.edgeCases.map((c) => (
+            <li class="flex gap-3">
+              <span class="mt-2 size-1.5 shrink-0 rounded-full bg-warn" aria-hidden="true" />
+              <span>{c}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </details>
+
+    <details class="group">
+      <summary class={summary}>
+        Where the code lives
+        <span aria-hidden="true" class="font-mono text-xs font-normal text-muted group-open:hidden">Show</span>
+        <span aria-hidden="true" class="hidden font-mono text-xs font-normal text-muted group-open:inline">Hide</span>
+      </summary>
+      <ul class="space-y-2 px-5 pb-5">
+        {
+          t.code.map((c) => (
+            <li class="flex flex-wrap items-baseline gap-x-3">
+              <span class="w-24 font-mono text-xs text-muted">{c.label}</span>
+              <span class="min-w-0 font-mono text-xs [overflow-wrap:anywhere] text-accent">{c.path}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </details>
+  </div>
+</section>

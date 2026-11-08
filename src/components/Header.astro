@@ -1,0 +1,233 @@
+---
+import {
+  Briefcase,
+  ChevronDown,
+  CodeXml,
+  Cpu,
+  FlaskConical,
+  Folder,
+  GraduationCap,
+  House,
+  Layers,
+  Mail,
+  Menu,
+  Moon,
+  PenLine,
+  Sun,
+  Trophy,
+  User,
+  X,
+} from 'lucide-react';
+import { navItems, site } from '../data/site';
+
+type NavItem = (typeof navItems)[number];
+
+const pathname = Astro.url.pathname;
+const onHome = pathname === '/';
+const hrefFor = (item: NavItem): string => ('href' in item ? item.href : `/#${item.id}`);
+// Pages are highlighted by address. On the Home page the scroll tracker (scripts/ui.ts) takes over from there.
+const isCurrent = (item: NavItem): 'true' | undefined => {
+  if (!('href' in item)) return undefined;
+  if (item.href === '/') return onHome ? 'true' : undefined;
+  return pathname.startsWith(item.href) ? 'true' : undefined;
+};
+const byId = (id: NavItem['id']): NavItem => navItems.find((i) => i.id === id) as NavItem;
+
+// One simple icon per link. They are decorative: the text already names each link.
+const icons = {
+  home: House,
+  about: User,
+  experience: Briefcase,
+  skills: Cpu,
+  projects: Folder,
+  achievements: Trophy,
+  education: GraduationCap,
+  lab: FlaskConical,
+  writing: PenLine,
+  contact: Mail,
+} as const;
+
+// The full bar: four of the sections are grouped under "Work".
+const fullEntries = [
+  { kind: 'link', item: byId('about') },
+  {
+    kind: 'group',
+    label: 'Work',
+    items: [byId('experience'), byId('skills'), byId('projects'), byId('achievements')],
+  },
+  { kind: 'link', item: byId('education') },
+  { kind: 'link', item: byId('lab') },
+  { kind: 'link', item: byId('writing') },
+  { kind: 'link', item: byId('contact') },
+] as const;
+
+// On a wide Home page the navbar is for pages only (Home, Lab, Writing, Contact), because the sections of the
+// Home page are in the "On this page" menu on its left. Everywhere else, and in the menu on small screens,
+// the full bar is shown.
+const entries = onHome
+  ? ([
+      { kind: 'link', item: byId('home') },
+      { kind: 'link', item: byId('lab') },
+      { kind: 'link', item: byId('writing') },
+      { kind: 'link', item: byId('contact') },
+    ] as const)
+  : fullEntries;
+
+const linkClass =
+  'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
+const subLinkClass =
+  'flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
+const mobileClass =
+  'flex items-center gap-3 rounded-md px-3 py-3 text-base text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-bg/90 backdrop-blur-sm"
+>
+  <div class="scroll-progress pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-accent" aria-hidden="true"></div>
+  <div class="container-page flex h-16 items-center justify-between">
+    <a
+      href="/"
+      class="group inline-flex min-h-11 items-center gap-2 rounded-md font-mono text-sm font-semibold tracking-tight"
+      aria-label={`${site.name}, back to top`}
+    >
+      <span
+        class="inline-flex size-7 items-center justify-center rounded-md border border-accent bg-accent-soft text-accent transition-transform duration-200 group-hover:scale-105"
+      >
+        <CodeXml size={15} aria-hidden="true" />
+      </span>
+      <span class="transition-colors group-hover:text-accent">mohd-nasir</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          entries.map((entry) => {
+            if (entry.kind === 'link') {
+              const Icon = icons[entry.item.id];
+              return (
+                <li>
+                  <a
+                    href={hrefFor(entry.item)}
+                    aria-current={isCurrent(entry.item)}
+                    data-nav-link
+                    data-spy={entry.item.id}
+                    class={linkClass}
+                  >
+                    <Icon size={15} aria-hidden="true" className="hidden shrink-0 xl:block" />
+                    {entry.item.label}
+                  </a>
+                </li>
+              );
+            }
+            return (
+              <li class="relative" data-nav-group data-dropdown>
+                <button
+                  type="button"
+                  data-group-toggle
+                  aria-expanded="false"
+                  aria-controls="work-menu"
+                  class={linkClass}
+                >
+                  <Layers size={15} aria-hidden="true" className="hidden shrink-0 xl:block" />
+                  <span class="whitespace-nowrap">{entry.label}</span>
+                  <ChevronDown size={14} aria-hidden="true" className="shrink-0 transition-transform duration-200" data-chevron />
+                </button>
+                <div id="work-menu" data-group-panel hidden class="absolute top-full left-0 z-50 pt-2">
+                  <ul class="w-52 rounded-xl border border-line bg-surface p-1.5 shadow-2xl shadow-black/30">
+                    {entry.items.map((item) => {
+                      const Icon = icons[item.id];
+                      return (
+                        <li>
+                          <a href={hrefFor(item)} aria-current={isCurrent(item)} class={subLinkClass}>
+                            <Icon size={15} aria-hidden="true" className="shrink-0" />
+                            {item.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1">
+      <button
+        type="button"
+        data-theme-toggle
+        class="inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+        aria-label="Switch to light theme"
+      >
+        <Sun size={18} className="hidden [[data-theme=dark]_&]:block" aria-hidden="true" />
+        <Moon size={18} className="hidden [[data-theme=light]_&]:block" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        data-menu-toggle
+        class="inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Menu size={20} data-icon-open aria-hidden="true" />
+        <X size={20} data-icon-close className="hidden" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+
+  <nav id="mobile-menu" aria-label="Mobile" hidden class="border-t border-line bg-bg lg:hidden">
+    <ul class="container-page flex flex-col py-3">
+      {
+        fullEntries.map((entry) => {
+          if (entry.kind === 'link') {
+            const Icon = icons[entry.item.id];
+            return (
+              <li>
+                <a
+                  href={hrefFor(entry.item)}
+                  aria-current={isCurrent(entry.item)}
+                  data-nav-link
+                  data-spy={entry.item.id}
+                  class={mobileClass}
+                >
+                  <Icon size={18} aria-hidden="true" className="shrink-0" />
+                  {entry.item.label}
+                </a>
+              </li>
+            );
+          }
+          return (
+            <li data-nav-group>
+              <details open class="group">
+                <summary
+                  class="flex min-h-12 cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-base text-muted marker:content-none hover:text-fg"
+                >
+                  <Layers size={18} aria-hidden="true" className="shrink-0" />
+                  <span>{entry.label}</span>
+                  <ChevronDown size={16} aria-hidden="true" className="ml-auto shrink-0 transition-transform group-open:rotate-180" />
+                </summary>
+                <ul class="ml-5 border-l border-line pl-2">
+                  {entry.items.map((item) => {
+                    const Icon = icons[item.id];
+                    return (
+                      <li>
+                        <a href={hrefFor(item)} aria-current={isCurrent(item)} class={mobileClass}>
+                          <Icon size={18} aria-hidden="true" className="shrink-0" />
+                          {item.label}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </details>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</header>

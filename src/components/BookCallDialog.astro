@@ -1,0 +1,41 @@
+---
+import { ExternalLink, X } from 'lucide-react';
+import { site } from '../data/site';
+---
+
+{
+  site.bookingUrl.length > 0 && (
+    <dialog data-book-dialog aria-labelledby="book-title" class="book-dialog">
+      <div class="flex items-center justify-between gap-4 border-b border-line bg-surface-2 px-4 py-3">
+        <h2 id="book-title" class="font-mono text-sm">
+          <span class="text-accent">$</span> book --call
+        </h2>
+        <div class="flex items-center gap-1">
+          <a
+            href={site.bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-10 items-center gap-1.5 rounded-md px-3 text-sm text-muted transition-colors hover:text-fg"
+          >
+            Open in new tab <ExternalLink size={14} aria-hidden="true" />
+          </a>
+          <button
+            type="button"
+            data-book-close
+            aria-label="Close booking window"
+            class="inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface hover:text-fg"
+          >
+            <X size={18} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+      <iframe
+        title="Schedule a call"
+        data-src={site.bookingUrl}
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        class="block h-[min(70vh,44rem)] w-full bg-white"
+      />
+    </dialog>
+  )
+}

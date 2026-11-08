@@ -1,0 +1,11 @@
+---
+/**
+ * Wrapper for an experiment. Full screen applies to this whole element (#lab-workspace);
+ * the Full screen button itself lives in the Inputs panel (see WorkspaceLayout.tsx).
+ */
+---
+
+<section id="lab-workspace" aria-labelledby="workspace-title" class="relative">
+  <h2 id="workspace-title" class="sr-only">Interactive workspace</h2>
+  <slot />
+</section>

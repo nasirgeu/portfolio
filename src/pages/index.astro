@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ProofStrip from '../components/ProofStrip.astro';
+import HomeSidebar from '../components/HomeSidebar.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Skills from '../components/Skills.astro';
+import Projects from '../components/Projects.astro';
+import LabTeaser from '../components/LabTeaser.astro';
+import WritingTeaser from '../components/WritingTeaser.astro';
+import Achievements from '../components/Achievements.astro';
+import Education from '../components/Education.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<Layout>
+  <Hero />
+  <ProofStrip />
+  <!-- Same layout as the Lab and Writing pages: a sticky section menu on the left, the sections on the right. -->
+  <div class="container-page mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
+    <HomeSidebar />
+    <div class="home-body min-w-0">
+      <About />
+      <Experience />
+      <Skills />
+      <Projects />
+      <LabTeaser />
+      <WritingTeaser />
+      <Achievements />
+      <Education />
+      <Contact />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,52 @@
+---
+import { GraduationCap } from 'lucide-react';
+import { education, schooling } from '../data/site';
+---
+
+<section id="education" class="section border-t border-line" aria-labelledby="education-title">
+  <div class="container-page">
+    <div class="mb-12" data-reveal>
+      <p class="eyebrow section-eyebrow mb-3">Education</p>
+      <h2 id="education-title" class="section-title">My education.</h2>
+    </div>
+
+    <div class="card flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8" data-reveal>
+      <div class="flex items-start gap-4">
+        <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent">
+          <GraduationCap size={24} aria-hidden="true" />
+        </span>
+        <div>
+          <h3 class="text-xl font-semibold">{education.degree}</h3>
+          <p class="text-muted">{education.university}</p>
+          <p class="mt-1 font-mono text-sm text-muted">{education.period} · {education.location}</p>
+        </div>
+      </div>
+      <div class="sm:text-right">
+        <p class="font-mono text-sm text-muted">CGPA</p>
+        <p class="text-4xl font-bold tracking-tight">
+          {education.cgpa}<span class="text-xl text-muted">/{education.cgpaScale}</span>
+        </p>
+      </div>
+    </div>
+
+    <ul class="mt-4 grid gap-4 md:grid-cols-2">
+      {
+        schooling.map((s, i) => (
+          <li class="card card-hover flex items-start justify-between gap-4 p-6" data-reveal data-reveal-delay={String(i * 80)}>
+            <div>
+              <h3 class="font-semibold">{s.school}</h3>
+              <p class="text-muted">{s.level}</p>
+              <p class="mt-1 font-mono text-sm text-muted">
+                {s.period} · {s.board} · {s.location}
+              </p>
+            </div>
+            <div class="shrink-0 text-right">
+              <p class="font-mono text-xs text-muted">Percentage</p>
+              <p class="font-mono text-xl font-semibold">{s.score}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
