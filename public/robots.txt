@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nasirgeu.pages.dev/sitemap-index.xml
+Sitemap: https://nasirgeu.mohdnasir4257.workers.dev/sitemap-index.xml
