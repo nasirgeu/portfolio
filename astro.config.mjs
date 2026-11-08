@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // Update SITE_URL (or set the SITE_URL env var in Cloudflare Pages) once you
 // know your final domain. It is used for the sitemap, canonical URLs and OG tags.
-const site = process.env.SITE_URL ?? 'https://nasirgeu.mohdnasir4257.workers.dev';
+const site = process.env.SITE_URL ?? 'https://nasirgeu.nasirdev.workers.dev';
 
 export default defineConfig({
   site,
