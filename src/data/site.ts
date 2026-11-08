@@ -17,7 +17,7 @@ export const site = {
   company: 'Tally Solutions',
   headline: ['Building Better', 'and Faster Software.'],
   description:
-    "I'm a Software Engineer at Tally Solutions with around 2 years of experience in C++. I work on core software components, memory management, multithreading and performance improvement. I enjoy solving difficult problems and building software that is fast, reliable and efficient.",
+    "I'm a Software Engineer at Tally Solutions with 2+ years of experience in C++. I work on core software components, memory management, multithreading and performance improvement. I enjoy solving difficult problems and building software that is fast, reliable and efficient.",
   metaDescription:
     'Mohd Nasir is a Software Engineer at Tally Solutions. He works with C++, multithreading, memory management, performance improvement, and data structures and algorithms.',
   location: 'Bangalore, India',
@@ -53,25 +53,17 @@ export const site = {
 } as const;
 
 /**
- * Proof strip under the hero. Only facts you can back up.
+ * Proof strip under the hero. Only facts you can back up. The two LeetCode charts (problems solved and
+ * contest rating) come from src/data/leetcode.ts, so only the other highlights are listed here.
  * `href` is where "see source" points ("" hides the link).
  */
 export const proof = [
   {
-    value: '1,700+',
-    label: 'LeetCode problems solved',
-    sourceLabel: 'LeetCode profile',
-    href: 'https://leetcode.com/u/Mohd_Nasir/',
-  },
-  {
-    value: '1989',
-    label: 'highest LeetCode contest rating',
-    sourceLabel: 'LeetCode profile',
-    href: 'https://leetcode.com/u/Mohd_Nasir/',
-  },
-  {
     value: '90%',
     label: 'faster than the system allocator in a measured benchmark',
+    title: 'Custom C++ memory manager',
+    detail:
+      'I built a custom memory manager in C++ to make allocation faster. It uses a block-based design to manage allocation metadata.',
     sourceLabel: 'About the memory manager',
     href: '#projects',
   },
@@ -97,7 +89,7 @@ export const navItems = [
 export const about = {
   heading: 'Working on the core of software systems.',
   paragraphs: [
-    "I'm a Software Engineer at Tally Solutions with around 2 years of experience in C++. Most of my work involves building core software components, working with multiple threads, managing memory and improving performance.",
+    "I'm a Software Engineer at Tally Solutions with 2+ years of experience in C++. Most of my work involves building core software components, working with multiple threads, managing memory and improving performance.",
     "At work, I've built a custom memory manager, worked on a reader-writer locking mechanism for shared data and improved core data types using faster comparison techniques. I enjoy understanding how things work behind the scenes and finding ways to make software faster and more reliable.",
     "Outside work, I enjoy competitive programming and solving challenging problems. I've solved more than 1,700 problems on LeetCode and reached a highest contest rating of 1989.",
   ],

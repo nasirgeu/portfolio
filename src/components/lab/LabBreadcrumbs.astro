@@ -17,7 +17,7 @@ const { items } = Astro.props;
       items.map((c, i) => (
         <li class="flex items-center gap-1.5">
           {c.href ? (
-            <a href={c.href} class="rounded px-1 py-0.5 transition-colors hover:text-accent">
+            <a href={c.href} class="inline-block rounded px-1.5 py-1.5 transition-colors hover:text-accent">
               {c.label}
             </a>
           ) : (
