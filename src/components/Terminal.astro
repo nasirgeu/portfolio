@@ -6,8 +6,11 @@ export interface TerminalLine {
 interface Props {
   lines: TerminalLine[];
   title?: string;
+  /** Optional: command name -> output lines. When given, an optional input and shortcut buttons appear. */
+  commands?: Record<string, string[]>;
 }
-const { lines, title = 'nasir@systems: ~' } = Astro.props;
+const { lines, title = 'nasir@systems: ~', commands } = Astro.props;
+const shortcuts = commands ? [...Object.keys(commands).filter((c) => c !== 'help'), 'clear'] : [];
 const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).join('. ');
 ---
 
@@ -19,7 +22,7 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
     <span class="ml-2 text-xs text-muted">{title}</span>
   </div>
   <!-- Fixed height prevents layout shift while typing -->
-  <div class="min-h-[15.5rem] p-4 sm:min-h-[14rem]" aria-hidden="true">
+  <div class:list={["min-h-[15.5rem] p-4 sm:min-h-[14rem]", commands && "pb-1 sm:min-h-[10rem]"]} aria-hidden="true">
     {
       lines.map((l) => (
         <div class:list={['term-line', l.kind === 'cmd' ? 'text-fg' : 'text-muted']} data-kind={l.kind}>
@@ -28,11 +31,44 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
         </div>
       ))
     }
-    <div class="term-line mt-1 text-fg" data-final>
-      <span class="mr-2 text-accent">$</span><span class="caret"></span>
-    </div>
+    {!commands && (
+      <div class="term-line mt-1 text-fg" data-final>
+        <span class="mr-2 text-accent">$</span><span class="caret"></span>
+      </div>
+    )}
   </div>
   <p class="sr-only">{fullText}</p>
+  {
+    commands && (
+      <div class="px-4 pb-3" data-term-interactive data-commands={JSON.stringify(commands)}>
+        <div data-term-out aria-live="polite" class="max-h-40 space-y-0.5 overflow-y-auto text-muted empty:hidden" />
+        <form data-term-form class="flex items-center gap-2">
+          <label for="term-input" class="sr-only">Type a command, or use the buttons below. Try help.</label>
+          <span class="text-accent" aria-hidden="true">$</span>
+          <input
+            id="term-input"
+            type="text"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="type help, or tap a command below"
+            class="w-full min-w-0 bg-transparent text-fg placeholder:text-muted/60 focus:outline-none"
+          />
+        </form>
+        <div class="mt-3 flex flex-wrap gap-1.5">
+          {shortcuts.map((c) => (
+            <button
+              type="button"
+              data-cmd={c}
+              class="rounded border border-line px-2 py-1 text-xs text-muted transition-colors hover:border-line-strong hover:text-fg"
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
 </div>
 
 <script>
@@ -65,5 +101,43 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
       };
       void type();
     }
+  }
+
+  // Optional interaction: predefined commands only. Nothing here is needed to read the page.
+  const panel = document.querySelector<HTMLElement>('[data-term-interactive]');
+  if (panel) {
+    const commands: Record<string, string[]> = JSON.parse(panel.dataset.commands ?? '{}');
+    const out = panel.querySelector<HTMLElement>('[data-term-out]')!;
+    const form = panel.querySelector<HTMLFormElement>('[data-term-form]')!;
+    const input = form.querySelector<HTMLInputElement>('input')!;
+
+    const add = (text: string, cls: string) => {
+      const row = document.createElement('div');
+      row.className = cls;
+      row.textContent = text;
+      out.append(row);
+    };
+    const run = (raw: string) => {
+      const cmd = raw.trim().toLowerCase();
+      if (!cmd) return;
+      if (cmd === 'clear') {
+        out.replaceChildren();
+        return;
+      }
+      add(`$ ${cmd}`, 'text-fg');
+      const result = commands[cmd];
+      if (result) result.forEach((l) => add(l, ''));
+      else add(`command not found: ${cmd}. Type help to see what is available.`, '');
+      out.scrollTop = out.scrollHeight;
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      run(input.value);
+      input.value = '';
+    });
+    panel.querySelectorAll<HTMLButtonElement>('[data-cmd]').forEach((b) =>
+      b.addEventListener('click', () => run(b.dataset.cmd ?? '')),
+    );
   }
 </script>

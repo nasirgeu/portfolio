@@ -159,7 +159,8 @@ const mobileClass =
       <button
         type="button"
         data-theme-toggle
-        class="inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+        data-tip="Switch to light theme"
+        class="tip tip-below inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
         aria-label="Switch to light theme"
       >
         <Sun size={18} className="hidden [[data-theme=dark]_&]:block" aria-hidden="true" />
@@ -168,7 +169,8 @@ const mobileClass =
       <button
         type="button"
         data-menu-toggle
-        class="inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg lg:hidden"
+        data-tip="Open menu"
+        class="tip tip-below inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg lg:hidden"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"

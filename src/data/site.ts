@@ -20,7 +20,7 @@ export const site = {
     "I'm a Software Engineer at Tally Solutions with 2+ years of experience in C++. I work on core software components, memory management, multithreading and performance improvement. I enjoy solving difficult problems and building software that is fast, reliable and efficient.",
   metaDescription:
     'Mohd Nasir is a Software Engineer at Tally Solutions. He works with C++, multithreading, memory management, performance improvement, and data structures and algorithms.',
-  location: 'Bangalore, India',
+  location: 'Bengaluru, India',
 
   email: 'mohdnasir4257@gmail.com',
 
@@ -126,7 +126,7 @@ export const experience: readonly ExperienceEntry[] = [
     company: 'Tally Solutions',
     role: 'Software Engineer',
     period: 'September 2024 – Present',
-    location: 'Bangalore, India',
+    location: 'Bengaluru, India',
     summary:
       'I work on core C++ components and help make software faster, more reliable and more efficient.',
     points: [

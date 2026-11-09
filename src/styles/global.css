@@ -158,7 +158,13 @@ body {
 }
 
 .section {
-  padding-block: clamp(3.25rem, 6vw, 5rem);
+  --section-pad: clamp(2.5rem, 5vw, 3.75rem);
+  padding-block: var(--section-pad);
+}
+/* When a nav link jumps to a section, land with its heading just under the navbar. The section's own top padding is
+   cancelled out of the scroll offset, so there is no large empty gap above the heading. */
+.section[id] {
+  scroll-margin-top: calc(-1 * var(--section-pad) - 0.25rem);
 }
 
 /* On the Home page the sections sit in the right-hand column, so they fill it instead of centring their own container. */
@@ -586,4 +592,100 @@ body {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* ---------- Memory blocks: the hovered or focused block lifts toward the viewer, like the ring ---------- */
+.mem-blk {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    opacity 0.2s ease;
+  cursor: pointer;
+  outline: none;
+}
+.mem-blocks:has(.mem-blk:hover, .mem-blk:focus-visible) .mem-blk:not(:hover, :focus-visible) {
+  opacity: 0.45;
+}
+.mem-blk:hover,
+.mem-blk:focus-visible {
+  transform: translateY(-4px) scale(1.14);
+  filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.55));
+}
+@media (prefers-reduced-motion: reduce) {
+  .mem-blk {
+    transition: none;
+  }
+}
+
+/* ---------- Small name tooltip for icon-only buttons (add data-tip="Name"; .tip-below opens downward) ---------- */
+.tip {
+  position: relative;
+}
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translate(-50%, 4px);
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--fg);
+  font-size: 0.8rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 20;
+}
+.tip:hover::after,
+.tip:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tip::after {
+    transition: none;
+  }
+}
+
+/* Opens downward and lines up with the button's right edge, so it never runs off the screen (these buttons sit at the right of their bar). */
+.tip-below::after {
+  bottom: auto;
+  top: calc(100% + 8px);
+  left: auto;
+  right: 0;
+  transform: translateY(-4px);
+}
+.tip-below:hover::after,
+.tip-below:focus-visible::after {
+  transform: translateY(0);
+}
+
+/* ---------- Pointer (hand) cursor on everything clickable. Tailwind 4 leaves buttons on the arrow. ---------- */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']),
+summary,
+select,
+input[type='checkbox'],
+input[type='radio'],
+input[type='range'],
+label[for] {
+  cursor: pointer;
+}
+
+/* Contact keeps the roomier spacing it had before the other sections were tightened. */
+#contact {
+  --section-pad: clamp(3.25rem, 6vw, 5rem);
+  /* Contact is the last section, so the page cannot scroll far enough to put it at the top. A minimum height (the footer
+     makes up the rest of a screen) lets the Contact link land with the heading just under the navbar. */
+  min-height: calc(100svh - 8rem);
+  /* Land with the section's top line on the navbar's bottom line (navbar is 4rem + its 1px border; the page offset is 5rem). */
+  scroll-margin-top: -1rem;
 }

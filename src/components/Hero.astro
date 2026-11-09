@@ -23,6 +23,18 @@ const terminalLines = [
   { kind: 'out', text: site.availability.show ? `● ${site.availability.label.toLowerCase()}` : '● heads down' },
 ] as const;
 
+// Optional interactive commands. Every line is taken from facts already on the site.
+const terminalCommands: Record<string, string[]> = {
+  help: ['whoami · role · expertise · experience · achievements · projects · contact · clear'],
+  whoami: [site.name],
+  role: [`Software Engineer @ ${site.company}`],
+  expertise: ['C++ | Systems Programming | Memory Management | Concurrency'],
+  experience: ['2+ years of C++ at Tally Solutions'],
+  achievements: ['1,700+ LeetCode problems solved · Knight · peak rating 1989', 'AIR 3 Coding Ninjas · Top 100 HackWithInfy 2024'],
+  projects: ['Custom memory manager | Core components | Engineering Lab'],
+  contact: [site.email],
+};
+
 const socials = site.socials.filter((s) => s.url.length > 0);
 
 // Headline "types in" once on load. Pure CSS: each letter fades in after a small delay,
@@ -175,7 +187,8 @@ const paraWords = paragraph.map((w) => ({
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex size-11 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-line-strong hover:text-fg"
+                  data-tip={s.label}
+                  class="tip inline-flex size-11 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-line-strong hover:text-fg"
                   aria-label={`${s.label} (opens in a new tab)`}
                 >
                   <Icon name={s.icon} size={20} />
@@ -188,7 +201,7 @@ const paraWords = paragraph.map((w) => ({
     </div>
 
     <div data-hero style="--d:200ms">
-      <Terminal lines={[...terminalLines]} />
+      <Terminal lines={[...terminalLines]} commands={terminalCommands} />
     </div>
   </div>
 </section>

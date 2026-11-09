@@ -209,7 +209,8 @@ function ProjectDialog({ project, onClose }: { project: Project | null; onClose:
               type="button"
               onClick={onClose}
               aria-label="Close project details"
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-line-strong hover:text-fg"
+              data-tip="Close"
+              className="tip tip-below inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-line-strong hover:text-fg"
             >
               <X size={18} aria-hidden="true" />
             </button>

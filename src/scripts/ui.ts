@@ -9,7 +9,9 @@ const themeBtn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]'
 
 function syncThemeUi(): void {
   const theme = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-  themeBtn?.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  const themeLabel = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+  themeBtn?.setAttribute('aria-label', themeLabel);
+  themeBtn?.setAttribute('data-tip', themeLabel);
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#090c12');
 }
 syncThemeUi();
@@ -36,6 +38,7 @@ function setMenu(open: boolean): void {
   menu.hidden = !open;
   menuBtn.setAttribute('aria-expanded', String(open));
   menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  menuBtn.setAttribute('data-tip', open ? 'Close menu' : 'Open menu');
   iconOpen?.classList.toggle('hidden', open);
   iconClose?.classList.toggle('hidden', !open);
 }

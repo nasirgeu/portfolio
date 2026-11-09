@@ -221,14 +221,14 @@ const sourceLink =
             <p class="mt-3 text-sm text-muted">{p.detail}</p>
             <svg
               viewBox="0 0 320 98"
-              class="mt-4 h-auto w-full max-w-[26rem]"
+              class="mem-blocks mt-4 h-auto w-full max-w-[26rem] overflow-visible"
               role="img"
               aria-label="Memory is split into blocks, and each block carries a small metadata header used to manage allocations."
             >
               <text x={BLOCK_X0} y="13" class="font-mono" font-size="9.5" fill="var(--muted)">memory split into blocks</text>
               {
                 memoryBlocks.map((i) => (
-                  <g>
+                  <g class="mem-blk" tabindex="0">
                     <rect x={blockX(i)} y={BLOCK_Y} width={BLOCK_W} height={BLOCK_H} rx="5" fill="var(--bg)" stroke="var(--border)" />
                     <rect x={blockX(i) + 3} y={BLOCK_Y + 3} width={BLOCK_W - 6} height="8" rx="2" fill="var(--warn)" opacity="0.8" />
                     <rect x={blockX(i) + 3} y={BLOCK_Y + 15} width={BLOCK_W - 6} height={BLOCK_H - 18} rx="3" fill="var(--accent)" opacity="0.6" />
