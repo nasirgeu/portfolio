@@ -1058,3 +1058,52 @@ label[for] {
     opacity: 0.4;
   }
 }
+
+/* ---------- 3D tilt and depth for cards marked data-tilt (see scripts/tilt.ts) ---------- */
+.tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition:
+    border-color var(--motion),
+    box-shadow var(--motion),
+    background-color var(--motion),
+    transform 0.18s ease-out;
+}
+.tilt-card:hover,
+.tilt-card:focus-within {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-3px);
+}
+/* Layers sit at slightly different depths, so the card has real thickness when it leans. */
+.tilt-card > h3 {
+  transform: translateZ(26px);
+}
+.tilt-card .chip {
+  transform: translateZ(14px);
+}
+/* A soft light that follows the pointer across the surface. */
+.tilt-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+  transition: opacity 0.25s ease;
+}
+.tilt-card:hover::after {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card:hover,
+  .tilt-card:focus-within {
+    transform: none;
+  }
+  .tilt-card > h3,
+  .tilt-card .chip {
+    transform: none;
+  }
+  .tilt-card::after {
+    display: none;
+  }
+}

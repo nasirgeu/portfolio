@@ -52,7 +52,7 @@ function Architecture({ layers }: { layers: readonly string[] }) {
 /** Card in the list: title, tagline and technologies. The arrow opens the full details in a popup. */
 function ProjectCard({ project, onOpen }: { project: Project; onOpen: () => void }) {
   return (
-    <article className="card card-hover flex flex-col">
+    <article className="card card-hover tilt-card flex flex-col" data-tilt>
       <h3 className="m-0">
         <button
           type="button"
