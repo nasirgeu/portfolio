@@ -4,19 +4,19 @@
 
 /* ---------- Design tokens ---------- */
 :root {
-  /* Dark theme: the night version of the light theme. Deep navy instead of black, the same blue family for borders
-     and surfaces, and a clear sky blue accent in place of the light theme's deeper blue. */
+  /* Dark theme: a lighter, softer night version of the light theme. Slate blue rather than black, so cards and
+     borders are easy to tell apart, with the same blue family and a bright sky blue accent. */
   color-scheme: dark;
-  --bg: #0b1322;
-  --surface: #101a2e;
-  --surface-2: #16223a;
-  --border: #223152;
-  --border-strong: #324671;
-  --fg: #e9f0fc;
-  --muted: #9aabc6;
-  --accent: #4db5f5;
-  --accent-fg: #06182b;
-  --accent-soft: rgb(77 181 245 / 0.13);
+  --bg: #141d31;
+  --surface: #1b2740;
+  --surface-2: #233250;
+  --border: #31415f;
+  --border-strong: #465a80;
+  --fg: #eff4fd;
+  --muted: #aebcd6;
+  --accent: #6cc4ff;
+  --accent-fg: #07182c;
+  --accent-soft: rgb(108 196 255 / 0.14);
   --warn: #f5a524;
   --hard: #f87171;
 
@@ -152,6 +152,10 @@ body {
   background:
     radial-gradient(42rem 24rem at 12% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
     radial-gradient(30rem 20rem at 85% 30%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%);
+}
+:root:not([data-theme='light']) body {
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--accent) 7%, var(--bg)) 0, var(--bg) 640px);
+  background-repeat: no-repeat;
 }
 :root:not([data-theme='light']) .hero-glow {
   background:
@@ -1180,4 +1184,13 @@ label[for] {
   margin-top: 1rem;
   border-radius: 2px;
   background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+/* ---------- Highlights band: a strip under the hero. Its lines stop at the page margins, not the screen edges. ---------- */
+/* On large desktop screens, and on very tall ones, the hero leaves room so the whole band is in view on arrival instead of
+   a large empty gap. Laptops keep a hero that fills the screen. */
+@media (min-width: 1700px), (min-width: 1024px) and (min-height: 1000px) {
+  #top {
+    min-height: calc(100svh - 22rem);
+  }
 }

@@ -12,7 +12,7 @@ function syncThemeUi(): void {
   const themeLabel = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
   themeBtn?.setAttribute('aria-label', themeLabel);
   themeBtn?.setAttribute('data-tip', themeLabel);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#0b1322');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#141d31');
 }
 syncThemeUi();
 

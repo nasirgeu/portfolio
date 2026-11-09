@@ -75,11 +75,11 @@ const sourceLink =
   'mt-auto inline-flex items-center gap-1 self-end pt-5 text-right font-mono text-xs text-accent hover:underline';
 ---
 
-<section aria-label="Highlights" class="pb-4">
+<section aria-label="Highlights" class="highlights-band">
   <div class="container-page">
-    <ul class="card grid divide-y divide-line overflow-hidden lg:grid-cols-3 lg:divide-x lg:divide-y-0" data-reveal>
+    <ul class="grid divide-y divide-line border-y border-line lg:grid-cols-3 lg:divide-x lg:divide-y-0" data-reveal>
       <!-- 1. Problems solved -->
-      <li class="ring-card flex min-w-0 flex-col p-6">
+      <li class="ring-card flex min-w-0 flex-col p-6 lg:pl-0">
         <p class="font-mono text-xs tracking-wider text-muted uppercase">LeetCode problems solved</p>
         <div class="mt-5 flex items-center gap-5">
           <!-- Point at the ring for the overall "Beats" percentage, or at a difficulty for that level's own percentage. -->
@@ -214,7 +214,7 @@ const sourceLink =
       <!-- 3. Other highlights -->
       {
         proof.map((p) => (
-          <li class="flex min-w-0 flex-col p-6">
+          <li class="flex min-w-0 flex-col p-6 lg:pr-0">
             <p class="font-mono text-xs tracking-wider text-muted uppercase">{p.title}</p>
             <p class="mt-1 text-4xl font-bold tracking-tight">{p.value}</p>
             <p class="mt-1 text-muted">{p.label}</p>
