@@ -12,12 +12,15 @@ function syncThemeUi(): void {
   const themeLabel = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
   themeBtn?.setAttribute('aria-label', themeLabel);
   themeBtn?.setAttribute('data-tip', themeLabel);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#141d31');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'light' ? '#f4f7fb' : '#0b1220');
 }
 syncThemeUi();
 
 themeBtn?.addEventListener('click', () => {
   const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  // Fade the colours for a moment so the switch is smooth (skipped when reduced motion is requested).
+  root.classList.add('theme-anim');
+  window.setTimeout(() => root.classList.remove('theme-anim'), 350);
   root.setAttribute('data-theme', next);
   try {
     localStorage.setItem('theme', next);

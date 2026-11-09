@@ -10,16 +10,6 @@
   margin-inline: auto;
 }
 
-.lab-grid-bg {
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 80% 70% at 30% 0%, #000 10%, transparent 70%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 30% 0%, #000 10%, transparent 70%);
-  opacity: 0.5;
-}
-
 /* ---------- Panels (workspace) ---------- */
 .lab-panel {
   background: var(--surface);
