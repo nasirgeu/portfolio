@@ -44,14 +44,14 @@ const jsonLd = [
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content="#090c12" />
+    <meta name="theme-color" content="#f4f7fb" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
@@ -70,14 +70,14 @@ const jsonLd = [
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Apply saved theme before first paint to avoid a flash -->
+    <!-- Apply the saved theme before first paint to avoid a flash. Light is the default for first-time visitors. -->
     <script is:inline>
       (function () {
         var d = document.documentElement;
         d.classList.add('js');
         try {
           var t = localStorage.getItem('theme');
-          if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          if (t !== 'dark' && t !== 'light') t = 'light';
           d.setAttribute('data-theme', t);
           var m = document.querySelector('meta[name="theme-color"]');
           if (m) m.setAttribute('content', t === 'light' ? '#f4f7fb' : '#090c12');
