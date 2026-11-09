@@ -4,17 +4,19 @@
 
 /* ---------- Design tokens ---------- */
 :root {
+  /* Dark theme: the night version of the light theme. Deep navy instead of black, the same blue family for borders
+     and surfaces, and a clear sky blue accent in place of the light theme's deeper blue. */
   color-scheme: dark;
-  --bg: #090c12;
-  --surface: #0e131c;
-  --surface-2: #141b27;
-  --border: #1e2735;
-  --border-strong: #2c3a4f;
-  --fg: #e9eef6;
-  --muted: #8c99ad;
-  --accent: #38bdf8;
-  --accent-fg: #04111a;
-  --accent-soft: rgb(56 189 248 / 0.12);
+  --bg: #0b1322;
+  --surface: #101a2e;
+  --surface-2: #16223a;
+  --border: #223152;
+  --border-strong: #324671;
+  --fg: #e9f0fc;
+  --muted: #9aabc6;
+  --accent: #4db5f5;
+  --accent-fg: #06182b;
+  --accent-soft: rgb(77 181 245 / 0.13);
   --warn: #f5a524;
   --hard: #f87171;
 
@@ -150,6 +152,11 @@ body {
   background:
     radial-gradient(42rem 24rem at 12% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
     radial-gradient(30rem 20rem at 85% 30%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 70%);
+}
+:root:not([data-theme='light']) .hero-glow {
+  background:
+    radial-gradient(46rem 26rem at 12% 8%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+    radial-gradient(34rem 24rem at 82% 34%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
 }
 
 :focus-visible {
@@ -1106,4 +1113,71 @@ label[for] {
   .tilt-card::after {
     display: none;
   }
+}
+
+/* The About heading sits beside the portrait, so it is a little smaller and breaks after "core". */
+.about-title {
+  font-size: clamp(1.5rem, 2.1vw, 1.9rem);
+  text-wrap: wrap;
+}
+
+/* ---------- About: framed portrait with a halo and a badge ---------- */
+.about-photo {
+  margin: 0 0.7rem 1.4rem 0;
+  isolation: isolate;
+}
+/* A soft light behind the portrait. */
+.about-photo::before {
+  content: '';
+  position: absolute;
+  inset: -1.6rem;
+  z-index: -2;
+  border-radius: 2rem;
+  background: radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 68%);
+  filter: blur(14px);
+}
+/* An outline offset behind the portrait, like a second layer. */
+.about-frame {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  translate: 0.7rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  border-radius: var(--radius-card);
+}
+.about-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -0.8rem;
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 18px -10px rgb(0 0 0 / 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.about-badge::before {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.about-rule {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin-top: 1rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
 }

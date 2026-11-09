@@ -2,30 +2,45 @@
 import { Image } from 'astro:assets';
 import { about, site } from '../data/site';
 import portrait from '../assets/nasir.jpg';
+
+// The heading reads on two lines: "Working on the core" / "of software systems." The text itself is unchanged.
+const headingLines = about.heading.split(/ (?=of )/);
 ---
 
 <section id="about" class="section border-t border-line" aria-labelledby="about-title">
   <div class="container-page">
     <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr]">
       <div>
-        <div class="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8" data-reveal>
-          {/* In the dark theme the photo is dimmed and blended into the page colour so it does not glare. */}
-          <div class="portrait relative size-32 shrink-0 overflow-hidden rounded-2xl border border-line-strong shadow-xl shadow-black/20 sm:size-40">
-            <Image
-              src={portrait}
-              alt={`Portrait of ${site.name}`}
-              width={320}
-              height={320}
-              densities={[1, 2]}
-              loading="lazy"
-              decoding="async"
-              class="size-full object-cover [[data-theme=dark]_&]:brightness-[0.72] [[data-theme=dark]_&]:contrast-[1.05] [[data-theme=dark]_&]:saturate-[0.85]"
-            />
-            <div class="portrait-tint pointer-events-none absolute inset-0" aria-hidden="true"></div>
+        <div class="mb-10 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-10" data-reveal>
+          {/* A framed portrait with a soft halo and a small badge. In the dark theme the photo is dimmed so it does not glare. */}
+          <div class="about-photo relative shrink-0 self-start sm:self-center">
+            <span class="about-frame" aria-hidden="true"></span>
+            <div class="portrait relative size-36 overflow-hidden rounded-2xl border border-line-strong shadow-xl shadow-black/20 sm:size-44">
+              <Image
+                src={portrait}
+                alt={`Portrait of ${site.name}`}
+                width={320}
+                height={320}
+                densities={[1, 2]}
+                loading="lazy"
+                decoding="async"
+                class="size-full object-cover [[data-theme=dark]_&]:brightness-[0.72] [[data-theme=dark]_&]:contrast-[1.05] [[data-theme=dark]_&]:saturate-[0.85]"
+              />
+              <div class="portrait-tint pointer-events-none absolute inset-0" aria-hidden="true"></div>
+            </div>
+            <span class="about-badge">{site.company}</span>
           </div>
-          <div>
+          <div class="min-w-0">
             <p class="eyebrow section-eyebrow mb-3">About</p>
-            <h2 id="about-title" class="section-title">{about.heading}</h2>
+            <h2 id="about-title" class="section-title about-title">
+              {headingLines.map((line) => <span class="block">{line}</span>)}
+            </h2>
+            <span class="about-rule" aria-hidden="true"></span>
+            <ul class="mt-4 flex flex-wrap gap-2" aria-label="Focus areas">
+              <li class="chip">C++</li>
+              <li class="chip">Memory management</li>
+              <li class="chip">Multithreading</li>
+            </ul>
           </div>
         </div>
         <div class="space-y-5 text-lg text-muted" data-reveal data-reveal-delay="80">
