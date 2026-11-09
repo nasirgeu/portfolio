@@ -22,7 +22,7 @@ const item =
 ---
 
 {/* On phones and tablets the sidebar is hidden, so the experiments are a row of buttons that scrolls sideways. */}
-<nav aria-label="Switch experiment" class="-mx-4 min-w-0 overflow-x-auto px-4 pb-1 lg:hidden">
+<nav aria-label="Switch experiment" data-swap-nav class="-mx-4 min-w-0 overflow-x-auto px-4 pb-1 lg:hidden">
   <ul class="flex w-max gap-2">
     <li>
       <a
@@ -51,7 +51,7 @@ const item =
   </ul>
 </nav>
 
-<nav aria-label="Lab experiments" class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block">
+<nav aria-label="Lab experiments" data-swap-nav class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block">
   <p class="mb-3 font-mono text-xs tracking-wider text-muted uppercase">Experiments</p>
   <ul class="flex flex-col gap-1">
     <li>

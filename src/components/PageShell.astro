@@ -1,0 +1,23 @@
+---
+/**
+ * The shared frame for the Lab and Writing pages: a sidebar on the left that stays in place, and the page content on
+ * the right. Picking another item in the sidebar swaps only the right-hand content (see scripts/sectionNav.ts).
+ *
+ * Slots: "sidebar" for the navigation, and the default slot for the page content.
+ */
+---
+
+<div class="relative pt-24 pb-16 sm:pt-28">
+  <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div class="page-grid-bg pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div class="container-page relative grid grid-cols-1 gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+    <slot name="sidebar" />
+    <div class="min-w-0" data-swap-content>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  import '../scripts/sectionNav';
+</script>

@@ -24,7 +24,7 @@
 .lab-panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 0.9rem;
+  border-radius: var(--radius-card);
 }
 .lab-panel-head {
   display: flex;
@@ -34,7 +34,7 @@
   padding: 0.7rem 1rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface-2);
-  border-radius: 0.9rem 0.9rem 0 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
@@ -49,48 +49,11 @@
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   overflow: hidden;
-  transition:
-    border-color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
 }
-.lab-card:hover,
-.lab-card:focus-within {
-  border-color: var(--accent);
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px -24px var(--accent);
-}
+/* Hover and focus come from the shared card rule in global.css. */
 
-.lab-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.lab-live::before {
-  content: '';
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 0 var(--accent);
-  animation: lab-pulse 2.2s ease-out infinite;
-}
-@keyframes lab-pulse {
-  0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
-  }
-  70%,
-  100% {
-    box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--accent) 0%, transparent);
-  }
-}
 
 /* ---------- Card previews (pure CSS, no JavaScript) ---------- */
 .pv-cell {
@@ -162,9 +125,6 @@
   .lab-card:hover,
   .lab-card:focus-within {
     transform: none;
-  }
-  .lab-live::before {
-    animation: none;
   }
   .lab-card:hover .pv-scan,
   .lab-card:hover .pv-bar,

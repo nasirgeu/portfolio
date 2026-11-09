@@ -74,11 +74,11 @@ const entries = onHome
   : fullEntries;
 
 const linkClass =
-  'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
+  'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
 const subLinkClass =
   'flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
 const mobileClass =
-  'flex items-center gap-3 rounded-md px-3 py-3 text-base text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
+  'flex items-center gap-3 rounded-lg px-3 py-3 text-base text-muted transition-colors hover:text-fg aria-[current=true]:bg-surface-2 aria-[current=true]:text-accent';
 ---
 
 <header
@@ -88,11 +88,11 @@ const mobileClass =
   <div class="container-page flex h-16 items-center justify-between">
     <a
       href="/"
-      class="group inline-flex min-h-11 items-center gap-2 rounded-md font-mono text-sm font-semibold tracking-tight"
+      class="group inline-flex min-h-11 items-center gap-2 rounded-lg font-mono text-sm font-semibold tracking-tight"
       aria-label={`${site.name}, back to top`}
     >
       <span
-        class="inline-flex size-7 items-center justify-center rounded-md border border-accent bg-accent-soft text-accent transition-transform duration-200 group-hover:scale-105"
+        class="inline-flex size-7 items-center justify-center rounded-lg border border-accent bg-accent-soft text-accent transition-transform duration-200 group-hover:scale-105"
       >
         <CodeXml size={15} aria-hidden="true" />
       </span>
@@ -160,7 +160,7 @@ const mobileClass =
         type="button"
         data-theme-toggle
         data-tip="Switch to light theme"
-        class="tip tip-below inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+        class="tip tip-below inline-flex size-10 items-center justify-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-fg"
         aria-label="Switch to light theme"
       >
         <Sun size={18} className="hidden [[data-theme=dark]_&]:block" aria-hidden="true" />
@@ -170,7 +170,7 @@ const mobileClass =
         type="button"
         data-menu-toggle
         data-tip="Open menu"
-        class="tip tip-below inline-flex size-10 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg lg:hidden"
+        class="tip tip-below inline-flex size-10 items-center justify-center rounded-lg text-muted transition-colors hover:bg-surface-2 hover:text-fg lg:hidden"
         aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
@@ -206,7 +206,7 @@ const mobileClass =
             <li data-nav-group>
               <details open class="group">
                 <summary
-                  class="flex min-h-12 cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-base text-muted marker:content-none hover:text-fg"
+                  class="flex min-h-12 cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-base text-muted marker:content-none hover:text-fg"
                 >
                   <Layers size={18} aria-hidden="true" className="shrink-0" />
                   <span>{entry.label}</span>

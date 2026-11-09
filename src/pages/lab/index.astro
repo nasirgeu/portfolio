@@ -2,6 +2,8 @@
 import LabLayout from '../../layouts/LabLayout.astro';
 import ExperimentCard from '../../components/lab/ExperimentCard.astro';
 import LabSidebar from '../../components/lab/LabSidebar.astro';
+import PageShell from '../../components/PageShell.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import LabArchitecture from '../../components/LabArchitecture';
 import { experiments, experimentsByGroup, groupInfo, totalAlgorithms, type ExperimentGroup } from '../../data/labExperiments';
 
@@ -18,25 +20,13 @@ const stats = [
   title="Engineering Lab | Mohd Nasir"
   description="Interactive experiments that help you understand operating systems and algorithms by trying them yourself, following each step and seeing the results."
 >
-  <div class="relative pt-24 pb-16 sm:pt-28">
-    <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-    <div class="lab-container relative grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
-      <LabSidebar />
-
-      <div class="min-w-0">
-        <p class="eyebrow mb-4" data-hero>MOHD NASIR / ENGINEERING LAB</p>
-        <h1
-          class="text-[clamp(2.1rem,4vw,3.2rem)] leading-[1.05] font-bold tracking-[-0.04em] text-balance"
-          data-hero
-          style="--d:60ms"
-        >
-          Explore. Experiment. Understand.
-        </h1>
-        <p class="mt-5 text-base text-muted sm:text-lg" data-hero style="--d:120ms">
-          I built these interactive experiments to make operating systems and algorithms easier to understand. Try
-          different inputs, follow each step and see how each algorithm works and how its results change.
-        </p>
-
+  <PageShell>
+    <LabSidebar slot="sidebar" />
+    <PageHeader
+      crumbs={[{ label: 'Portfolio', href: '/' }, { label: 'Lab' }]}
+      title="Explore. Experiment. Understand."
+      intro="I built these interactive experiments to make operating systems and algorithms easier to understand. Try different inputs, follow each step and see how each algorithm works and how its results change."
+    >
         <dl class="mt-8 flex flex-wrap gap-x-10 gap-y-4" data-hero style="--d:180ms">
           {
             stats.map((s) => (
@@ -50,6 +40,7 @@ const stats = [
             ))
           }
         </dl>
+    </PageHeader>
 
         <section class="mt-12" aria-labelledby="experiments-title">
           <h2 id="experiments-title" class="sr-only">Pick an experiment</h2>
@@ -88,7 +79,7 @@ const stats = [
                   text: "Whenever an algorithm makes a decision, you'll see a simple explanation of what happened and why.",
                 },
               ].map((item, i) => (
-                <li class="rounded-xl border border-line bg-surface p-5" data-reveal data-reveal-delay={String(i * 80)}>
+                <li class="card p-6" data-reveal data-reveal-delay={String(i * 80)}>
                   <p class="font-mono text-xs text-accent">0{i + 1}</p>
                   <h3 class="mt-2 font-semibold">{item.title}</h3>
                   <p class="mt-1.5 text-sm text-muted">{item.text}</p>
@@ -108,7 +99,5 @@ const stats = [
           </p>
           <LabArchitecture client:visible />
         </section>
-      </div>
-    </div>
-  </div>
+  </PageShell>
 </LabLayout>

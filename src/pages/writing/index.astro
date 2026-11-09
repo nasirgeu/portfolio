@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import WritingSidebar from '../../components/WritingSidebar.astro';
+import PageShell from '../../components/PageShell.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import { ArrowRight } from 'lucide-react';
 import { featuredPosts, groups, posts, readingMinutes, shortTitle, writingSection } from '../../data/writing';
 
@@ -21,23 +23,13 @@ const sections = groups
   title="Writing | Mohd Nasir"
   description="Short, plain-language notes on operating systems and algorithms, with one post for every algorithm in the Engineering Lab."
 >
-  <div class="relative pt-24 pb-16 sm:pt-28">
-    <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-    <div class="container-page relative grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
-      <WritingSidebar />
-
-      <div class="min-w-0">
-        <p class="eyebrow mb-4" data-hero>MOHD NASIR / WRITING</p>
-        <h1
-          class="text-[clamp(2.1rem,4vw,3.2rem)] leading-[1.05] font-bold tracking-[-0.04em] text-balance"
-          data-hero
-          style="--d:60ms"
-        >
-          {writingSection.heading}
-        </h1>
-        <p class="mt-5 text-base text-muted sm:text-lg" data-hero style="--d:120ms">
-          {writingSection.intro}
-        </p>
+  <PageShell>
+    <WritingSidebar slot="sidebar" />
+    <PageHeader
+      crumbs={[{ label: 'Portfolio', href: '/' }, { label: 'Writing' }]}
+      title={writingSection.heading}
+      intro={writingSection.intro}
+    />
 
         {
           posts.length === 0 ? (
@@ -126,7 +118,5 @@ const sections = groups
             </>
           )
         }
-      </div>
-    </div>
-  </div>
+  </PageShell>
 </Layout>

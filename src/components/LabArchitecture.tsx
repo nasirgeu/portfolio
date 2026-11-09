@@ -95,7 +95,7 @@ export default function LabArchitecture() {
   );
 
   return (
-    <div className="card p-5 sm:p-7">
+    <div className="card p-6 sm:p-8">
       <p className="mb-4 text-sm text-muted">Select any part of the diagram to learn what it does and why it is designed this way.</p>
 
       <ol className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center" aria-label="How a demo works, from input to screen">

@@ -26,6 +26,7 @@ const item =
 
 <nav
   aria-label="Posts"
+  data-swap-nav
   class="hidden min-w-0 self-start lg:sticky lg:top-24 lg:block lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-1"
 >
   <p class="mb-3 font-mono text-xs tracking-wider text-muted uppercase">Writing</p>
@@ -42,7 +43,7 @@ const item =
           <details class="group" open={s.name === currentGroup}>
             <summary class="flex min-h-10 cursor-pointer items-center gap-2.5 rounded-lg px-3 py-1.5 font-mono text-xs tracking-wider text-muted uppercase marker:content-none hover:text-fg">
               <s.Icon size={15} aria-hidden="true" className="shrink-0" />
-              <span>{s.name}</span>
+              <span class="whitespace-nowrap">{s.name}</span>
               <span class="ml-auto font-mono text-xs">{s.items.length}</span>
               <ChevronDown
                 size={14}
