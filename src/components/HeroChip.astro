@@ -1,0 +1,127 @@
+---
+/**
+ * The hero's 3D scene: a processor on a circuit board, drawn with CSS 3D transforms and SVG only. The board sways gently instead of spinning, so the "C++" on the chip always reads the right way round.
+ * No library and no images, so it costs almost nothing to load, and it never blocks the page from showing.
+ * It is decoration, hidden from assistive technology, and stays still when reduced motion is requested.
+ */
+
+// Circuit traces on a 600 x 600 board. The chip sits in the middle (220 to 380 on both axes).
+const traces = [
+  'M380 270 H450 V200 H540',
+  'M380 300 H520',
+  'M380 330 H440 V400 H530 V460',
+  'M220 270 H150 V200 H70',
+  'M220 300 H80',
+  'M220 330 H160 V400 H90 V470',
+  'M270 220 V150 H210 V80',
+  'M300 220 V60',
+  'M330 220 V120 H400 V50',
+  'M270 380 V450 H220 V540',
+  'M300 380 V550',
+  'M330 380 V440 H390 V520',
+];
+// Where each trace ends, drawn as a small pad.
+const pads = traces.map((t) => {
+  const nums = t.match(/-?\d+/g)!.map(Number);
+  const cmds = t.match(/[MHV]/g)!;
+  let x = 0;
+  let y = 0;
+  let i = 0;
+  for (const c of cmds) {
+    if (c === 'M') {
+      x = nums[i++]!;
+      y = nums[i++]!;
+    } else if (c === 'H') x = nums[i++]!;
+    else y = nums[i++]!;
+  }
+  return { x, y };
+});
+// One light travels along each trace. The timings are fixed so the build is the same every time.
+const lights = traces.map((d, i) => ({ d, dur: 3.2 + ((i * 7) % 5) * 0.7, delay: -((i * 13) % 9) * 0.55 }));
+const pins = Array.from({ length: 10 });
+// Small technical labels that float above the board.
+const floaters = [
+  { text: '0x7FFE', x: '8%', y: '18%', z: 70, d: 0 },
+  { text: '1011 0110', x: '78%', y: '12%', z: 95, d: -2 },
+  { text: 'malloc()', x: '86%', y: '72%', z: 60, d: -4 },
+  { text: '0100 1101', x: '4%', y: '76%', z: 85, d: -1 },
+];
+---
+
+<div class="chip-stage" aria-hidden="true" data-chip>
+  <div class="chip-cam">
+    <div class="chip-tilt">
+      <div class="chip-plane">
+        <svg class="chip-traces" viewBox="0 0 600 600" fill="none">
+          <g class="chip-lines">
+            {traces.map((d) => <path d={d} />)}
+          </g>
+          {pads.map((p) => <circle cx={p.x} cy={p.y} r="4.5" class="chip-pad" />)}
+        </svg>
+
+        {
+          lights.map((l) => (
+            <span class="chip-light" style={`offset-path:path('${l.d}');animation-duration:${l.dur}s;animation-delay:${l.delay}s`} />
+          ))
+        }
+
+        <div class="chip-die">
+          <div class="chip-pins chip-pins-x">{pins.map(() => <i />)}</div>
+          <div class="chip-pins chip-pins-y">{pins.map(() => <i />)}</div>
+          <div class="chip-side chip-side-n"></div>
+          <div class="chip-side chip-side-s"></div>
+          <div class="chip-side chip-side-w"></div>
+          <div class="chip-side chip-side-e"></div>
+          <div class="chip-top">
+            <div class="chip-core"><span>C++</span></div>
+          </div>
+        </div>
+
+      </div>
+      {
+        floaters.map((f) => (
+          <span class="chip-float" style={`left:${f.x};top:${f.y};--z:${f.z}px;animation-delay:${f.d}s`}>
+            {f.text}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  // The scene leans a little toward the pointer and drifts with the scroll. Skipped for touch screens and reduced motion.
+  const stage = document.querySelector<HTMLElement>('[data-chip]');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stage && !calm) {
+    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let frame = 0;
+    let px = 0;
+    let py = 0;
+    const apply = (): void => {
+      frame = 0;
+      const y = Math.min(window.scrollY, 900);
+      stage.style.setProperty('--tx', `${(px * 14).toFixed(1)}deg`);
+      stage.style.setProperty('--ty', `${(-py * 10).toFixed(1)}deg`);
+      stage.style.setProperty('--zoom', (1 + y / 2400).toFixed(3));
+      stage.style.setProperty('--lift', `${(-y * 0.12).toFixed(1)}px`);
+      stage.style.setProperty('--fade', Math.max(0, 1 - y / 800).toFixed(2));
+    };
+    const queue = (): void => {
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+    if (fine) {
+      window.addEventListener(
+        'pointermove',
+        (e) => {
+          px = e.clientX / window.innerWidth - 0.5;
+          py = e.clientY / window.innerHeight - 0.5;
+          queue();
+        },
+        { passive: true },
+      );
+    }
+    window.addEventListener('scroll', queue, { passive: true });
+    queue();
+  }
+</script>

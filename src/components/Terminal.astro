@@ -22,7 +22,7 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
     <span class="ml-2 text-xs text-muted">{title}</span>
   </div>
   <!-- Fixed height prevents layout shift while typing -->
-  <div class:list={["min-h-[15.5rem] p-4 sm:min-h-[14rem]", commands && "pb-1 sm:min-h-[10rem]"]} aria-hidden="true">
+  <div class:list={["p-4", commands ? "pb-2" : "min-h-[15.5rem] sm:min-h-[14rem]"]} aria-hidden="true">
     {
       lines.map((l) => (
         <div class:list={['term-line', l.kind === 'cmd' ? 'text-fg' : 'text-muted']} data-kind={l.kind}>
@@ -42,7 +42,7 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
     commands && (
       <div class="px-4 pb-3" data-term-interactive data-commands={JSON.stringify(commands)}>
         <div data-term-out aria-live="polite" class="max-h-40 space-y-0.5 overflow-y-auto text-muted empty:hidden" />
-        <form data-term-form class="flex items-center gap-2">
+        <form data-term-form class="term-form flex items-center gap-2">
           <label for="term-input" class="sr-only">Type a command, or use the buttons below. Try help.</label>
           <span class="text-accent" aria-hidden="true">$</span>
           <input
@@ -99,7 +99,20 @@ const fullText = lines.map((l) => (l.kind === 'cmd' ? `$ ${l.text}` : l.text)).j
           await sleep(380);
         }
       };
-      void type();
+      // Start when the terminal scrolls into view, so the typing is not finished before anyone sees it.
+      if ('IntersectionObserver' in window) {
+        const watcher = new IntersectionObserver(
+          (entries) => {
+            if (!entries.some((e) => e.isIntersecting)) return;
+            watcher.disconnect();
+            void type();
+          },
+          { threshold: 0.35 },
+        );
+        watcher.observe(root);
+      } else {
+        void type();
+      }
     }
   }
 

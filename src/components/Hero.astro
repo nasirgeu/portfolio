@@ -1,38 +1,9 @@
 ---
 import { ArrowRight } from 'lucide-react';
 import { site } from '../data/site';
-import Terminal from './Terminal.astro';
+import HeroChip from './HeroChip.astro';
 import ResumeButton from './ResumeButton.astro';
 import Icon from './Icon.astro';
-
-// Decorative "memory map": deterministic cells so the build is stable.
-const COLS = 16;
-const ROWS = 9;
-const cells = Array.from({ length: COLS * ROWS }, (_, i) => ({
-  show: (i * 7) % 5 !== 0,
-  delay: ((i * 37) % 53) / 10,
-}));
-
-const terminalLines = [
-  { kind: 'cmd', text: 'whoami' },
-  { kind: 'out', text: `${site.name.toLowerCase().replace(' ', '-')}: software engineer @ ${site.company.toLowerCase()}` },
-  { kind: 'cmd', text: 'cat focus.txt' },
-  { kind: 'out', text: 'c/c++ · systems · memory · performance · dsa' },
-  { kind: 'cmd', text: './status --availability' },
-  { kind: 'out', text: site.availability.show ? `● ${site.availability.label.toLowerCase()}` : '● heads down' },
-] as const;
-
-// Optional interactive commands. Every line is taken from facts already on the site.
-const terminalCommands: Record<string, string[]> = {
-  help: ['whoami · role · expertise · experience · achievements · projects · contact · clear'],
-  whoami: [site.name],
-  role: [`Software Engineer @ ${site.company}`],
-  expertise: ['C++ | Systems Programming | Memory Management | Concurrency'],
-  experience: ['2+ years of C++ at Tally Solutions'],
-  achievements: ['1,700+ LeetCode problems solved · Knight · peak rating 1989', 'AIR 3 Coding Ninjas · Top 100 HackWithInfy 2024'],
-  projects: ['Custom memory manager | Core components | Engineering Lab'],
-  contact: [site.email],
-};
 
 const socials = site.socials.filter((s) => s.url.length > 0);
 
@@ -67,24 +38,9 @@ const paraWords = paragraph.map((w) => ({
 }));
 ---
 
-<section id="top" tabindex="-1" class="relative outline-none overflow-hidden pt-28 pb-10 sm:pt-36 lg:pt-40 lg:pb-10">
+<section id="top" tabindex="-1" class="relative outline-none overflow-hidden pt-24 pb-8 sm:pt-28 lg:pt-24 lg:pb-8">
   <div class="hero-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
   <div class="hero-grid absolute inset-0" aria-hidden="true"></div>
-  <div
-    class="pointer-events-none absolute top-24 right-[-2rem] hidden gap-1.5 md:grid"
-    style={`grid-template-columns: repeat(${COLS}, 0.9rem); mask-image: linear-gradient(to left, #000 10%, transparent 85%); -webkit-mask-image: linear-gradient(to left, #000 10%, transparent 85%);`}
-    aria-hidden="true"
-  >
-    {
-      cells.map((c) => (
-        <span
-          class:list={['block aspect-square', c.show ? 'mem-cell' : '']}
-          style={c.show ? `animation-delay:${c.delay}s` : undefined}
-        />
-      ))
-    }
-  </div>
-
   <div class="container-page relative grid items-center gap-12 lg:grid-cols-[1.15fr_1fr]">
     <div class="min-w-0">
       <div class="flex flex-col items-start gap-2.5" data-hero>
@@ -177,8 +133,9 @@ const paraWords = paragraph.map((w) => ({
       }
     </div>
 
-    <div data-hero style="--d:200ms">
-      <Terminal lines={[...terminalLines]} commands={terminalCommands} />
+    {/* The right-hand slot: the 3D processor scene. Decoration only, and hidden on small screens. */}
+    <div class="relative hidden h-[27rem] lg:block" aria-hidden="true">
+      <HeroChip />
     </div>
   </div>
 </section>

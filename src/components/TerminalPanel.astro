@@ -1,0 +1,28 @@
+---
+import { site } from '../data/site';
+import Terminal from './Terminal.astro';
+
+const terminalLines = [
+  { kind: 'cmd', text: 'whoami' },
+  { kind: 'out', text: `${site.name.toLowerCase().replace(' ', '-')}: software engineer @ ${site.company.toLowerCase()}` },
+  { kind: 'cmd', text: 'cat focus.txt' },
+  { kind: 'out', text: 'c/c++ · systems · memory · performance · dsa' },
+  { kind: 'cmd', text: './status --availability' },
+  { kind: 'out', text: site.availability.show ? `● ${site.availability.label.toLowerCase()}` : '● heads down' },
+] as const;
+
+// Optional interactive commands. Every line is taken from facts already on the site.
+const terminalCommands: Record<string, string[]> = {
+  help: ['whoami · role · expertise · experience · achievements · projects · contact · clear'],
+  whoami: [site.name],
+  role: [`Software Engineer @ ${site.company}`],
+  expertise: ['C++ | Systems Programming | Memory Management | Concurrency'],
+  experience: ['2+ years of C++ at Tally Solutions'],
+  achievements: ['1,700+ LeetCode problems solved · Knight · peak rating 1989', 'AIR 3 Coding Ninjas · Top 100 HackWithInfy 2024'],
+  projects: ['Custom memory manager | Core components | Engineering Lab'],
+  contact: [site.email],
+};
+---
+
+{/* The interactive terminal for the Contact section. Optional: everything it says is also on the page. */}
+<Terminal lines={[...terminalLines]} commands={terminalCommands} />

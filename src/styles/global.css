@@ -758,3 +758,273 @@ label[for] {
     animation: none;
   }
 }
+
+/* ---------- Hero 3D chip scene (CSS 3D and SVG only, no library) ---------- */
+.chip-stage {
+  --board: 600px;
+  position: absolute;
+  top: 50%;
+  /* A little left of the middle of its slot, so the labels on the right are not cut off. */
+  left: calc(50% - 3rem);
+  width: var(--board);
+  height: var(--board);
+  margin: calc(var(--board) / -2) 0 0 calc(var(--board) / -2);
+  opacity: var(--fade, 1);
+  pointer-events: none;
+}
+.chip-cam {
+  width: 100%;
+  height: 100%;
+  perspective: 1200px;
+  transform: translateY(var(--lift, 0px)) scale(calc(var(--zoom, 1) * var(--k, 1)));
+  transform-origin: center;
+}
+.chip-tilt {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg));
+  transition: transform 0.3s ease-out;
+}
+.chip-plane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(58deg) rotateZ(-28deg);
+  animation: chip-sway 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes chip-sway {
+  from {
+    transform: rotateX(58deg) rotateZ(-50deg);
+  }
+  to {
+    transform: rotateX(58deg) rotateZ(-6deg);
+  }
+}
+.chip-traces {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 55%, transparent));
+}
+.chip-lines path {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  opacity: 0.55;
+}
+.chip-pad {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+/* A small light travelling along each trace. */
+.chip-light {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--fg);
+  box-shadow:
+    0 0 8px 2px var(--accent),
+    0 0 18px 4px color-mix(in srgb, var(--accent) 45%, transparent);
+  offset-rotate: 0deg;
+  offset-distance: 0%;
+  animation: chip-travel 4s linear infinite;
+}
+@keyframes chip-travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+/* The processor: a slab with a metallic top, sides and pins. */
+.chip-die {
+  position: absolute;
+  left: 220px;
+  top: 220px;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+}
+.chip-top {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: translateZ(18px);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--fg) 22%, transparent);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.22), transparent 38%),
+    linear-gradient(145deg, #4a566b 0%, #232c3b 45%, #313d52 70%, #151b26 100%);
+  box-shadow:
+    inset 0 0 0 5px rgb(0 0 0 / 0.18),
+    0 0 40px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.chip-core {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 45%, #0a1018), #0a1018 75%);
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--accent) 50%, transparent);
+  animation: chip-pulse 3.2s ease-in-out infinite;
+}
+.chip-core span {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 0 10px var(--accent);
+}
+@keyframes chip-pulse {
+  50% {
+    box-shadow: inset 0 0 30px color-mix(in srgb, var(--accent) 80%, transparent);
+  }
+}
+.chip-side {
+  position: absolute;
+  background: linear-gradient(#232c3b, #0d121a);
+  border: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+}
+.chip-side-n {
+  left: 0;
+  top: -9px;
+  width: 160px;
+  height: 18px;
+  transform: translateZ(9px) rotateX(-90deg);
+}
+.chip-side-s {
+  left: 0;
+  bottom: -9px;
+  width: 160px;
+  height: 18px;
+  transform: translateZ(9px) rotateX(-90deg);
+}
+.chip-side-w {
+  left: -9px;
+  top: 0;
+  width: 18px;
+  height: 160px;
+  transform: translateZ(9px) rotateY(90deg);
+}
+.chip-side-e {
+  right: -9px;
+  top: 0;
+  width: 18px;
+  height: 160px;
+  transform: translateZ(9px) rotateY(90deg);
+}
+/* Pins along the four edges, lying on the board. */
+.chip-pins {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+}
+.chip-pins i {
+  display: block;
+  background: linear-gradient(#c9d4e4, #6c7a92);
+  border-radius: 1px;
+}
+.chip-pins-x {
+  left: 10px;
+  right: 10px;
+  top: -16px;
+  bottom: -16px;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  height: auto;
+}
+.chip-pins-x i {
+  width: 5px;
+  /* Each pin is drawn as a thin bar above and below the die. */
+  box-shadow: 0 172px 0 #8e9bb2;
+  height: 12px;
+}
+.chip-pins-y {
+  top: 10px;
+  bottom: 10px;
+  left: -16px;
+  right: -16px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.chip-pins-y i {
+  height: 5px;
+  width: 12px;
+  box-shadow: 172px 0 0 #8e9bb2;
+}
+/* Technical labels floating above the board. */
+.chip-float {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  opacity: 0.8;
+  white-space: nowrap;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent);
+  transform: translateZ(var(--z, 60px));
+  animation: chip-bob 6s ease-in-out infinite;
+}
+@keyframes chip-bob {
+  50% {
+    translate: 0 -8px;
+  }
+}
+@media (max-width: 1279px) {
+  .chip-stage {
+    --k: 0.75;
+  }
+}
+@media (max-width: 1023px) {
+  .chip-stage {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip-plane,
+  .chip-light,
+  .chip-core,
+  .chip-float {
+    animation: none;
+  }
+  .chip-light {
+    display: none;
+  }
+  .chip-tilt {
+    transition: none;
+  }
+}
+
+/* Terminal prompt: no box around the input. A thin accent line under the prompt shows it is active. */
+.term-form input:focus-visible {
+  outline: none;
+}
+.term-form {
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--motion);
+}
+.term-form:focus-within {
+  border-bottom-color: var(--accent);
+}

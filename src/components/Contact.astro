@@ -2,6 +2,7 @@
 import { ArrowUpRight, CalendarDays, Copy, Download } from 'lucide-react';
 import { site, contact } from '../data/site';
 import Icon from './Icon.astro';
+import TerminalPanel from './TerminalPanel.astro';
 
 const socials = site.socials.filter((s) => s.url.length > 0);
 const hasEmail = site.email.length > 0;
@@ -125,6 +126,13 @@ const icon = 'inline-flex size-9 shrink-0 items-center justify-center rounded-lg
           </div>
         )
       }
+    </div>
+  </div>
+
+  <div class="container-page mt-10 grid items-start gap-6 lg:mt-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20" data-reveal>
+    <p class="font-mono text-xs tracking-wider text-muted uppercase lg:pt-3">Prefer a terminal? Try a command</p>
+    <div class="min-w-0">
+      <TerminalPanel />
     </div>
   </div>
 </section>
