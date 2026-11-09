@@ -620,7 +620,8 @@ body {
 }
 
 /* ---------- Small name tooltip for icon-only buttons (add data-tip="Name"; .tip-below opens downward) ---------- */
-.tip {
+/* Not for elements that are already positioned, such as the fixed back-to-top button. */
+.tip:not(.fixed) {
   position: relative;
 }
 .tip::after {
@@ -688,4 +689,15 @@ label[for] {
   min-height: calc(100svh - 8rem);
   /* Land with the section's top line on the navbar's bottom line (navbar is 4rem + its 1px border; the page offset is 5rem). */
   scroll-margin-top: -1rem;
+}
+
+/* Opens upward and lines up with the button's right edge (for the back-to-top button in the bottom corner). */
+.tip-end::after {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+.tip-end:hover::after,
+.tip-end:focus-visible::after {
+  transform: translateY(0);
 }

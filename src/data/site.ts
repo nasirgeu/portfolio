@@ -15,9 +15,9 @@ export const site = {
   name: 'Mohd Nasir',
   title: 'Software Engineer | C++ Developer | Systems Engineer',
   company: 'Tally Solutions',
-  headline: ['Building Better', 'and Faster Software.'],
+  headline: 'Building reliable software at its core.',
   description:
-    "I'm a Software Engineer at Tally Solutions with 2+ years of experience in C++. I work on core software components, memory management, multithreading and performance improvement. I enjoy solving difficult problems and building software that is fast, reliable and efficient.",
+    'Software Engineer at Tally Solutions with 2+ years of experience building C++ components, working on memory management, concurrency and performance optimisation.',
   metaDescription:
     'Mohd Nasir is a Software Engineer at Tally Solutions. He works with C++, multithreading, memory management, performance improvement, and data structures and algorithms.',
   location: 'Bengaluru, India',

@@ -18,6 +18,7 @@ const socials = site.socials.filter((s) => s.url.length > 0);
       <div>
         <p class="font-mono text-sm font-semibold tracking-tight">{site.name}</p>
         <p class="mt-1 max-w-xs text-sm text-muted">Software Engineer building fast and reliable software with C++.</p>
+        <p class="mt-1 text-sm text-muted">{site.location}</p>
       </div>
       <nav aria-label="Footer">
         <ul class="flex flex-wrap gap-x-6 gap-y-1">
@@ -29,6 +30,28 @@ const socials = site.socials.filter((s) => s.url.length > 0);
                 </a>
               </li>
             ))
+          }
+          {
+            site.email.length > 0 && (
+              <li>
+                <a href={`mailto:${site.email}`} class="inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-accent">
+                  Email
+                </a>
+              </li>
+            )
+          }
+          {
+            site.resumeUrl.length > 0 && (
+              <li>
+                <a
+                  href={site.resumeUrl}
+                  download={site.resumeFileName}
+                  class="inline-flex min-h-9 items-center text-sm text-muted transition-colors hover:text-accent"
+                >
+                  Resume
+                </a>
+              </li>
+            )
           }
           {
             socials.map((s) => (
