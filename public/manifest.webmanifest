@@ -1,0 +1,15 @@
+{
+  "name": "Mohd Nasir | Software Engineer",
+  "short_name": "Mohd Nasir",
+  "description": "Portfolio of Mohd Nasir, a Software Engineer working on C++, systems programming, memory management and performance.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#f4f7fb",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,24 @@
+---
+import { Share2 } from 'lucide-react';
+
+interface Props {
+  /** Title passed to the share sheet. */
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<button
+  type="button"
+  data-share
+  data-share-title={title}
+  class="tip btn !min-h-10 !px-3 !text-sm"
+  data-tip="Share this post"
+>
+  <Share2 size={16} aria-hidden="true" />
+  <span data-share-label aria-live="polite">Share</span>
+</button>
+
+<script>
+  import '../scripts/share';
+</script>

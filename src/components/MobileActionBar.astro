@@ -1,0 +1,34 @@
+---
+import { CalendarDays, Download } from 'lucide-react';
+import { site } from '../data/site';
+
+const hasResume = site.resumeUrl.length > 0;
+const hasBooking = site.bookingUrl.length > 0;
+---
+
+{
+  /* Phones only (below 768px): the two actions a recruiter most often wants, always one tap away. The hero hides its own
+     Download Resume button at these widths, so the same button is never on screen twice. */
+}
+{
+  (hasResume || hasBooking) && (
+    <div
+      class="action-bar fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-line bg-surface/90 p-2.5 backdrop-blur md:hidden"
+      role="region"
+      aria-label="Quick actions"
+    >
+      {hasResume && (
+        <a href={site.resumeUrl} download={site.resumeFileName} class="btn btn-primary !px-3 !text-sm">
+          <Download size={16} aria-hidden="true" />
+          Download Resume
+        </a>
+      )}
+      {hasBooking && (
+        <button type="button" class="btn !px-3 !text-sm" data-book-call aria-haspopup="dialog">
+          <CalendarDays size={16} aria-hidden="true" />
+          {site.bookingLabel}
+        </button>
+      )}
+    </div>
+  )
+}

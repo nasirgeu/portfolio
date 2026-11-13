@@ -1,46 +1,35 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import '../styles/global.css';
-import { site, education } from '../data/site';
+import { site } from '../data/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Seo from '../components/Seo.astro';
 import { ArrowUp } from 'lucide-react';
 import BookCallDialog from '../components/BookCallDialog.astro';
+import MobileActionBar from '../components/MobileActionBar.astro';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import type { ArticleInfo, Crumb } from '../lib/seo';
 
 interface Props {
-  title?: string;
-  description?: string;
+  title?: string | undefined;
+  description?: string | undefined;
+  /** Keep the page out of search results. */
+  noindex?: boolean | undefined;
+  ogType?: 'website' | 'article' | undefined;
+  /** Breadcrumb trail after "Home", for the structured data. */
+  crumbs?: readonly Crumb[] | undefined;
+  /** Set on writing posts: adds BlogPosting data. */
+  article?: ArticleInfo | undefined;
 }
 
-const { title = `${site.name} | ${site.title}`, description = site.metaDescription } = Astro.props;
-
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImagePath = existsSync(join(process.cwd(), 'public', site.ogImage)) ? site.ogImage : null;
-const ogImage = ogImagePath ? new URL(ogImagePath, Astro.site).href : null;
-const sameAs = site.socials.map((s) => s.url).filter((u) => u.length > 0);
-
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: site.name,
-    jobTitle: 'Software Engineer',
-    url: Astro.site?.href,
-    description,
-    worksFor: { '@type': 'Organization', name: site.company },
-    alumniOf: { '@type': 'CollegeOrUniversity', name: education.university },
-    knowsAbout: ['C++', 'C', 'Systems Programming', 'Memory Management', 'Performance Optimization', 'Data Structures and Algorithms'],
-    ...(sameAs.length > 0 ? { sameAs } : {}),
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: `${site.name} | Portfolio`,
-    url: Astro.site?.href,
-  },
-];
+const {
+  title = `${site.name} | ${site.title}`,
+  description = site.metaDescription,
+  noindex = false,
+  ogType = 'website',
+  crumbs,
+  article,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -48,27 +37,14 @@ const jsonLd = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="author" content={site.name} />
+    <Seo title={title} description={description} noindex={noindex} ogType={ogType} crumbs={crumbs} article={article} />
     <meta name="theme-color" content="#f4f7fb" />
-    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
     <link rel="sitemap" href="/sitemap-index.xml" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
-
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <!-- Apply the saved theme before first paint to avoid a flash. Light is the default for first-time visitors. -->
     <script is:inline>
@@ -85,7 +61,7 @@ const jsonLd = [
       })();
     </script>
   </head>
-  <body>
+  <body class="max-md:pb-[4.75rem]">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-fg"
@@ -98,13 +74,14 @@ const jsonLd = [
     </main>
     <Footer />
     <BookCallDialog />
+    <MobileActionBar />
     <button
       type="button"
       data-to-top
       hidden
       aria-label="Back to top"
       data-tip="Back to top"
-      class="tip tip-end fixed right-4 bottom-4 z-40 inline-flex size-11 items-center justify-center rounded-lg border border-line-strong bg-surface text-muted transition-colors hover:text-accent sm:right-6 sm:bottom-6"
+      class="tip tip-end fixed right-4 bottom-20 z-40 inline-flex size-11 items-center justify-center rounded-lg border border-line-strong bg-surface text-muted transition-colors hover:text-accent sm:right-6 md:bottom-6"
     >
       <ArrowUp size={18} aria-hidden="true" />
     </button>

@@ -82,6 +82,39 @@ html {
     font-size: 93.75%;
   }
 }
+/* Same look from a phone to a 32-inch monitor: the base size stays at 15px up to 1536px wide, then grows gently, so rem-based
+   text, spacing and the page width all scale together. The growth starts exactly at the laptop size (no jump). On the root
+   element, rem means the browser default of 16px, so 0.9375rem is 15px. */
+@media (min-width: 1536px) {
+  html {
+    font-size: clamp(93.75%, calc(0.9375rem + (100vw - 1536px) * 0.0055), 131%);
+  }
+}
+/* Never scroll sideways. clip (unlike hidden) keeps sticky elements working. */
+html,
+body {
+  overflow-x: clip;
+}
+/* Touch screens and anything narrower than a laptop: every tap target is at least 44px tall (and icon buttons 44px wide).
+   Links written inside a sentence are inline, so this does not stretch them. */
+@media (pointer: coarse), (max-width: 1023px) {
+  :root button:not(:disabled),
+  :root summary,
+  :root [role='button'],
+  :root .btn,
+  :root a.flex,
+  :root a.inline-flex,
+  :root a.block,
+  :root a.inline-block,
+  :root nav a {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+  :root select,
+  :root input[type='text'] {
+    min-height: 2.75rem;
+  }
+}
 
 body {
   background: var(--bg);

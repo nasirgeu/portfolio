@@ -2,6 +2,8 @@
 import LabLayout from '../../layouts/LabLayout.astro';
 import PageShell from '../../components/PageShell.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import { relatedForExperiment } from '../../lib/related';
 import LabSidebar from '../../components/lab/LabSidebar.astro';
 import ExperimentWorkspace from '../../components/lab/ExperimentWorkspace.astro';
 import TechnicalDetails from '../../components/lab/TechnicalDetails.astro';
@@ -30,6 +32,10 @@ const { prev, next } = getNeighbours(experiment.slug);
 <LabLayout
   title={`${experiment.name} | Engineering Lab | Mohd Nasir`}
   description={experiment.seoDescription}
+  crumbs={[
+    { name: 'Engineering Lab', path: '/lab/' },
+    { name: experiment.name, path: `/lab/${experiment.slug}/` },
+  ]}
 >
   <!-- Experiments list on the left; inputs and controls, then the visualization, top to bottom on the right. -->
   <PageShell>
@@ -66,6 +72,7 @@ const { prev, next } = getNeighbours(experiment.slug);
           </section>
 
           <TechnicalDetails experiment={experiment} />
+    <RelatedLinks heading="Related reading" items={relatedForExperiment(experiment.slug)} />
     <ExperimentNavigation prev={prev} next={next} />
   </PageShell>
 </LabLayout>

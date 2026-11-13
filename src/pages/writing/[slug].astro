@@ -3,6 +3,9 @@ import Layout from '../../layouts/Layout.astro';
 import WritingSidebar from '../../components/WritingSidebar.astro';
 import PageShell from '../../components/PageShell.astro';
 import PageHeader from '../../components/PageHeader.astro';
+import ShareButton from '../../components/ShareButton.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import { relatedForPost } from '../../lib/related';
 import { ArrowRight } from 'lucide-react';
 import { formatDate, getPostNeighbours, posts, readingMinutes, shortTitle, type Post } from '../../data/writing';
 
@@ -17,7 +20,22 @@ const { post } = Astro.props;
 const { newer, older } = getPostNeighbours(post.slug);
 ---
 
-<Layout title={`${post.title} | Writing | Mohd Nasir`} description={post.summary}>
+<Layout
+  title={`${post.title} | Writing | Mohd Nasir`}
+  description={post.summary}
+  ogType="article"
+  crumbs={[
+    { name: 'Writing', path: '/writing/' },
+    { name: post.title, path: `/writing/${post.slug}/` },
+  ]}
+  article={{
+    title: post.title,
+    description: post.summary,
+    datePublished: post.date,
+    section: post.group,
+    keywords: post.tags,
+  }}
+>
   <PageShell>
     <WritingSidebar slot="sidebar" current={post.slug} />
     <article aria-labelledby="post-title">
@@ -28,9 +46,12 @@ const { newer, older } = getPostNeighbours(post.slug);
         titleId="post-title"
         meta={`${formatDate(post.date)} · ${readingMinutes(post)} min read`}
       >
-        <ul class="mt-4 flex flex-wrap gap-2" aria-label="Topics">
-          {post.tags.map((t) => <li class="chip">{t}</li>)}
-        </ul>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <ul class="flex flex-wrap gap-2" aria-label="Topics">
+            {post.tags.map((t) => <li class="chip">{t}</li>)}
+          </ul>
+          <ShareButton title={post.title} />
+        </div>
       </PageHeader>
 
       <div class="mt-10 space-y-5 text-lg leading-relaxed text-muted" data-hero style="--d:80ms">
@@ -69,6 +90,8 @@ const { newer, older } = getPostNeighbours(post.slug);
           })
         }
       </div>
+
+      <RelatedLinks heading="Keep reading" items={relatedForPost(post)} />
 
       {
         (newer || older) && (

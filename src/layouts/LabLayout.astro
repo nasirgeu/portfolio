@@ -1,14 +1,16 @@
 ---
 import Layout from './Layout.astro';
 import '../styles/lab.css';
+import type { Crumb } from '../lib/seo';
 
 interface Props {
   title: string;
   description: string;
+  crumbs?: readonly Crumb[] | undefined;
 }
-const { title, description } = Astro.props;
+const { title, description, crumbs } = Astro.props;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} crumbs={crumbs}>
   <slot />
 </Layout>

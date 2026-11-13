@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
+    "postbuild": "node tests/seo.test.ts",
+    "test:built": "node tests/seo.test.ts",
     "preview": "astro preview",
     "check": "astro check",
     "test": "node tests/pageReplacement.test.ts && node tests/scheduling.test.ts && node tests/allocator.test.ts && node tests/sorting.test.ts && node tests/searching.test.ts && node tests/graph.test.ts"

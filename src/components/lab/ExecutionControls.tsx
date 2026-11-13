@@ -22,7 +22,7 @@ interface Props {
 }
 
 const btn =
-  'btn !min-h-10 !px-2.5 sm:!px-3 !text-sm disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent';
+  'btn !min-h-11 lg:!min-h-10 !px-2.5 sm:!px-3 !text-sm disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent';
 /** On phones only the icons show, so the whole bar fits on one line. */
 const label = 'hidden sm:inline';
 

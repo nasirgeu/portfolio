@@ -85,3 +85,6 @@ if (document.querySelector(CONTENT)) {
     if (inSameSection(url)) void show(url, false);
   });
 }
+
+// Marks this file as a module, so its names stay private.
+export {};

@@ -53,3 +53,6 @@ if (fine && !calm) {
     active = null;
   });
 }
+
+// Marks this file as a module, so its names stay private.
+export {};

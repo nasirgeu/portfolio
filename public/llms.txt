@@ -1,0 +1,25 @@
+# Mohd Nasir
+
+> Portfolio of Mohd Nasir, a Software Engineer at Tally Solutions in Bengaluru, India, with 2+ years of experience in C++. He works on core software components, memory management, multithreading and performance improvement. Everything below is also stated on the site itself.
+
+## Main pages
+
+- [Home](https://mohdnasir.site/): introduction, highlights, about, experience, skills, projects, competitive programming, education and contact.
+- [Engineering Lab](https://mohdnasir.site/lab/): 6 interactive experiments covering 34 algorithms (page replacement, CPU scheduling, memory allocation, sorting, searching and graph algorithms). Everything runs in the browser, step by step.
+- [Writing](https://mohdnasir.site/writing/): short, plain-language notes on operating systems and algorithms, with one post for each algorithm in the Engineering Lab.
+
+## Facts
+
+- Role: Software Engineer at Tally Solutions (since September 2024).
+- Focus: C and C++, systems programming, memory management, concurrency and performance optimisation.
+- Education: B.Tech in Computer Science, Graphic Era Deemed to be University.
+- Competitive programming: 1,700+ LeetCode problems solved, highest contest rating 1989, Knight badge, Coding Ninjas AIR 3, HackWithInfy 2024 Top 100 finalist.
+- Work at Tally Solutions is part of internal company projects, so its source code and detailed implementation are not public.
+
+## Links
+
+- GitHub: https://github.com/nasirgeu
+- LinkedIn: https://www.linkedin.com/in/nasirgeu/
+- LeetCode: https://leetcode.com/u/Mohd_Nasir/
+- Resume (PDF): https://mohdnasir.site/Mohd-Nasir-Resume.pdf
+- Email: mohdnasir4257@gmail.com
