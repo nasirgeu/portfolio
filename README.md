@@ -62,7 +62,7 @@ Project descriptions are intentionally high-level. Do not add confidential sourc
 
 ### Domain
 
-The sitemap, canonical URLs and Open Graph tags use the site URL. The default is `https://nasirgeu.nasirdev.workers.dev`.
+The sitemap, canonical URLs and Open Graph tags use the site URL. The default is `https://mohdnasir.site`.
 
 - Set an environment variable `SITE_URL` in Cloudflare Pages (for example `https://yourname.dev`), **or** edit `astro.config.mjs`.
 - Update the `Sitemap:` line in `public/robots.txt` to match.

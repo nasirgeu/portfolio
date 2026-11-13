@@ -4,9 +4,9 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// Update SITE_URL (or set the SITE_URL env var in Cloudflare Pages) once you
-// know your final domain. It is used for the sitemap, canonical URLs and OG tags.
-const site = process.env.SITE_URL ?? 'https://nasirgeu.nasirdev.workers.dev';
+// The public address of the site. It is used for the sitemap, canonical URLs and OG tags.
+// Set the SITE_URL environment variable to override it (for example for a preview build).
+const site = process.env.SITE_URL ?? 'https://mohdnasir.site';
 
 export default defineConfig({
   site,

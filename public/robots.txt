@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nasirgeu.nasirdev.workers.dev/sitemap-index.xml
+Sitemap: https://mohdnasir.site/sitemap-index.xml
